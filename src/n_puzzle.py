@@ -14,8 +14,8 @@ class Node:
         elif dim < 3:
             raise ValueError("n_puzzle dimensions must be greater than 2")
         
-        self.left = None
-        self.right = None
+        self.parent = None
+
             
     ##Prints the puzzle at the current state
     def printPuzzle(self):
@@ -26,5 +26,29 @@ class Node:
         return [[int(item) for array in np.where(self.n_puzzle == 0) for item in array.flatten()][1], [int(item) for array in np.where(self.n_puzzle == 0) for item in array.flatten()][0]] if np.where(self.n_puzzle == 0) else ValueError("Misconfigured puzzle")
         #I know this is bad, you don't have to tell me
 
-class puzzleTree:
-    #Aditi this is where you come in
+
+
+class puzzleProblem:
+    #contains the details of the problem
+    #initialize frontier with the first initial state node
+    def __init__(self, initialState, dim) -> None:
+        #the puzzle should know its initial and goal states
+        self.initialState = Node(initialState)
+        self.dim = dim
+        self.goalState = self.createGoalState(dim)
+        self.frontier = {}
+        # a list of visited nodes 
+        self.seen = {}
+   
+
+    def expandNode(node):
+        #this function will figure out a list of all the valid next states that we can get
+        # and order them by cost to add into frontier
+        pass
+    def isGoal(node):
+        #compare node to goal
+        pass
+    def createGoalState(self, dim):
+    #make a goal state n puzzle based on dimension.
+        self.goalState = 2 # this is not implemented yet....!
+        pass
