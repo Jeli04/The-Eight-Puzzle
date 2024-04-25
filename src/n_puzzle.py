@@ -15,7 +15,10 @@ class Node:
             raise ValueError("n_puzzle dimensions must be greater than 2")
         
         self.parent = None
-
+        self.heuristic = 0
+        self.cost = 0 
+        self.totalCost = self.heuristic + self.cost
+        
             
     ##Prints the puzzle at the current state
     def printPuzzle(self):
