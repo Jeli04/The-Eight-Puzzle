@@ -8,20 +8,20 @@ class Node:
             self.n_puzzle = np.arange(self.dim * self.dim)
             np.random.shuffle(self.n_puzzle)
             self.n_puzzle = np.asmatrix(self.n_puzzle).reshape(self.dim, self.dim)
-        elif dim > 3 and n_puzzle != None:
+        elif dim >= 3 and n_puzzle != None:
             self.dim = dim
             self.n_puzzle = n_puzzle
         elif dim < 3:
             raise ValueError("n_puzzle dimensions must be greater than 2")
         
-        self.parent = None
+        self.parent = None #For A* star algorithm to keep trace of past heuristic values
         self.heuristic = 0
         self.cost = 0 
         self.totalCost = self.heuristic + self.cost   
             
     ##Prints the puzzle at the current state
     def printPuzzle(self):
-        print(self.n_puzzle)
+        print(np.asmatrix(self.n_puzzle))
 
     ##Gets the index of the "blank" (for us 0) puzzle piece
     def getInitialStateIndex(self):
@@ -46,20 +46,15 @@ class puzzleProblem:
         # this function will figure out a list of all the valid next states that we can get
         # and order them by cost to add into frontier
         pass
-    def isGoal(node):
-        #compare node to goal
-        pass
+
+    def isGoal(self) -> bool:
+        return self.root == self.goalState
 
     def createGoalState(self, dim) -> np.matrix:
         return np.asmatrix(np.arange(dim * dim).reshape(dim, dim))
     
     def printGoalState(self):
         print(self.goalState)
-
-
-puzzle = puzzleProblem(Node(3))
-
-puzzle.printGoalState()
 
     
     
