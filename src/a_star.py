@@ -61,9 +61,20 @@ class a_star:
 
         return initial_game_board
         
-
-    def _misplaced_tile_heuristic(self, game_board):
-        pass
+    """
+        Function: returns the heuristic cost of misplaced tile
+        Parameters: A possible child node
+        Return: Heuristic cost of child node
+    """
+    def _misplaced_tile_heuristic(self, child_node):
+        cost = 0
+        i = 1
+        for row in child_node.get_board():
+            for tile in row:
+                if i != tile:
+                    cost += 1
+                i+=1
+        return cost
 
     def _euclidean_distance_heuristic(self, game_board):
         pass
