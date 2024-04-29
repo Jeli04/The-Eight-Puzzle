@@ -12,7 +12,7 @@ class a_star:
     def call_a_star(self, initial_game_board, heuristic):
         self.frontier.append((initial_game_board, 0))
         while self.frontier.empty()!= True:
-            pair = self.frontier.pop()
+            pair = self.frontier.pop(0)
             node = pair[0]
             curr_node_cost = pair[1]
 
