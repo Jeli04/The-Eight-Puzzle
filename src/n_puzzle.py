@@ -1,4 +1,5 @@
 import numpy as np
+import heapq
 
 class Node:
     #Constructor for puzzle node
@@ -37,7 +38,7 @@ class puzzleProblem:
         #the puzzle should know its initial and goal states
         self.root = root
         self.goalState = self.createGoalState(root.dim)
-        self.frontier = {}
+        self.frontier = []
         # a list of visited nodes 
         self.seen = set()
    
