@@ -1,39 +1,65 @@
+import math
 import heapq
+from n_puzzle import Node
+from n_puzzle import puzzleProblem
 
-class Tile:
-    def __init__(self, num, cost, heuristic):
-        self.num = num  # Number of the tile
-        self.cost = cost
-        self.heuristic = heuristic #0
-–
-def uniform_cost_search(matrix) -> string:
-    Node = initial state
-    cost = 0
-    
-    heapq pq()
-    pq.heappush(node)
-    seen = set() #empty to start
-    
-    while (pq):
-        if (pq.is_empty):
-            return "No solution"
+class uniform_cost_search:
+    def execute_ucs(initial_game_board):
+        frontier.heappush((0, initial_game_board))
         
-        curNode = pq.top()
-        pq.pop()
+        while frontier.empty() != True:
+            pair = frontier.heappop
+            cur_cost = pair[0]
+            node = pair[1]
         
-        if isGoal(curNode):
-            return "Solution found"
-        
-        seen.add(curNode)
-        
-        for (every operator in Operators):
+            # return current state if goal is found
+            if node.is_goal():
+                return node
+       
+            # mark current node as visited
+            seen.append(pair)
             
-    
-    
-# string uniformCostSearch(vector<vector<int>> puzzle) {
-    # priority_queue<Node*, vector<Node*>, compFunction> pq;
-    # pq.push(some node);
-
-    # int cost = 0;
-    # unordered_set<string> seen; //empty
-# }
+            # obtain child node from all 4 possible operators
+            for action in node.get_actions():
+                child = None
+                
+                if action == "right":
+                    child = node.go_right()
+                elif action == "left":
+                    child = node.go_left()
+                elif action == "top":
+                    child = node.go_top()
+                elif action == "bottom":
+                    child = node.go_bottom()
+            
+                # calculate the child node cost (delete later)
+                child_cost = child.parent.cost + 1
+                
+                seen = False
+                
+                # update child node if smaller cost is found
+                for pair in frontier:
+                    if pair[1].get_board() == child.get_board():
+                        seen = True
+                        
+                        if child_cost < cur_cost:
+                            pair[1].cost = child_cost
+                            pair[1].parent = node
+                
+                for item in seen:
+                    if item.get_board() == child.get_board():
+                        seen = True
+                        
+                        if child_cost < cur_cost:
+                            item.cost = child_cost
+                            item.parent = node
+                            frontier.heappush((child_cost, item))
+                
+                # add into frontier if never seen yet
+                if seen == False:
+                    child.cost = child_cost
+                    frontier.heappush((child_cost, child))
+                
+            seen.append(node)
+        
+        return None
