@@ -1,24 +1,29 @@
+import math
+
 class a_star:
     def __init__(self) -> None:
-        self.frontier = []
+        # DELETE LATER not sets since we cant hash objects 
+        self.frontier = []  # should sort by ascending f cost
         self.explored = []
-
 
     '''
         Function: calls A* with a heuristic
         Parameters: the intial game board, and the heuristic name as a string
         Return: Intial state if no solution, A child node if solution exists 
     '''
-    def call_a_star(self, initial_game_board, heuristic):
+    def call_a_star(self, initial_game_board, heuristic_type):
         self.frontier.append((initial_game_board, 0))
         while self.frontier.empty()!= True:
             pair = self.frontier.pop(0)
-            node = pair[0]
-            curr_node_cost = pair[1]
+            node = pair[0]  # contains the actual object 
+            curr_node_cost = pair[1]    # contrains the numerical cost from start to curr
+
+            # calculate the g(n) + h(n) cost
+            node.totalCost = node.cost + node.heuristic
 
             # check if node is a goal state 
             if node.is_goal():
-                return node
+                return self.explored
             
             # add into explored list 
             self.explored.append(pair)
@@ -36,31 +41,44 @@ class a_star:
                 elif action == "bottom":
                     child = node.go_bottom()
 
-                # calculate the g(n) + h(n) cost
-                heuristic_cost = 0
-                if heuristic == "misplaced": heuristic_cost = self._misplaced_tile_heuristic(child)
-                if heuristic == "euclidean": heuristic_cost = self._euclidean_distance_heuristic(child)
-                child_cost = node.start_to_curr_cost + heuristic_cost
+                # calculate the child node g value
+                child_cost = (child.parent.cost + 1) 
+
+                seen = False
+                for pair in self.frontier:
+                    if pair[0].get_board() == child.get_board():
+                        seen = True
+                        if child_cost < curr_node_cost:
+                            pair[0].cost = child_cost
+                            pair[0].parent = node
+
+                # update child node if smaller cost     
+                for n in self.explored:
+                    if n.get_board() == child.get_board():
+                        seen = True
+                        if child_cost < curr_node_cost:
+                            n.cost = child_cost
+                            n.parent = node
+                            self.frontier.append((n, child_cost + self.heuristic_cost(heuristic_type, child)))
 
                 # add into frontier if never seen yet
-                if child not in self.frontier or child not in self.explored:
-                    self.frontier.append((child, heuristic_cost))
+                if seen == False:
+                    child.cost = child_cost
+                    child.heuristic = self.heuristic_cost(heuristic_type, child)             
+                    self.frontier.append((child, child.cost + child.heuristic))
 
-                # update child node if smaller cost
-                elif child_cost < curr_node_cost and child in self.explored:
-                    child.start_to_curr_cost = child_cost
-                    child.parent = node
-                    # remove the child node from explored 
+            self.explored.append(node)
 
-                elif child_cost < curr_node_cost and child in self.frontier:
-                    child.start_to_curr_cost = child_cost
-                    child.parent = node
+        return None
 
-            self.explored.append((node, curr_node_cost))
-
-
-        return initial_game_board
+    # helper function
+    def heuristic_cost(self, heuristic, child):
+        heuristic_cost = 0
+        if heuristic == "misplaced": heuristic_cost = self._misplaced_tile_heuristic(child)
+        if heuristic == "euclidean": heuristic_cost = self._euclidean_distance_heuristic(child)
+        return heuristic_cost
         
+
     """
         Function: returns the heuristic cost of misplaced tile
         Parameters: A possible child node
@@ -77,15 +95,20 @@ class a_star:
         return cost
 
 
-    def _euclidean_distance_heuristic(game_board):
+    """
+        Function: return the heuristic cost with euclidean distance for each tile
+        Parameters: A possible child node
+        Return: Heuristic cost of child node
+    """
+    def _euclidean_distance_heuristic(child_node):
         cost = 0
         curr_row = 0
         curr_column = 0
-        dimensionality = len(game_board.get_board()[0])
+        dimensionality = len(child_node.get_board()[0])
         correct_val = 1 #meant to indicate what the correct tile at that location in the grid is
-        for row in game_board.get_board():
+        for row in child_node.get_board():
             for tile in row:
-                if(correct_val != game_board[row][tile]):
+                if(correct_val != child_node[row][tile]):
                     goal_row = correct_val / dimensionality
                     goal_column = (correct_val % dimensionality) - 1
 
