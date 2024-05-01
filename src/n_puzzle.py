@@ -18,7 +18,8 @@ class Node:
         self.parent = None #For A* star algorithm to keep trace of past heuristic values
         self.heuristic = 0
         self.cost = 0 
-        self.totalCost = self.heuristic + self.cost   
+        self.totalCost = self.heuristic + self.cost  
+        #self.dim = dim 
             
     ##Prints the puzzle at the current state
     def printPuzzle(self):
@@ -41,12 +42,34 @@ class puzzleProblem:
         self.frontier = []
         # a list of visited nodes 
         self.seen = []
+        #self.dimension = root.dim
    
 
-    def expandNode(node):
+    def expandNode(self,node):
         # this function will figure out a list of all the valid next states that we can get
         # and order them by cost to add into frontier
-        pass
+        #n = Node(self.dimension, node)
+        dimension= node.dim
+        listOfActions = []
+        index = node.getInitialStateIndex()
+        print(type(index))
+        print(index[0]) # is col number
+        print(index[1]) # is row 
+        if index[0]!=(dimension-1):
+            #if not right most column, you can go right
+            listOfActions.append("right")
+        if index[0]!=0:
+            #if not leftmost col, you can go left
+            listOfActions.append("left")
+        if index[1]!=0:
+            #if not topmost row, you can go up
+            listOfActions.append("up")
+        if index[1]!=(dimension-1):
+            #if not bottommost row, you can go down
+            listOfActions.append("down")
+        
+        print(index)
+        print(listOfActions)
 
     def isGoal(self) -> bool:
         return self.root == self.goalState

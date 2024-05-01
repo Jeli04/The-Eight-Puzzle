@@ -28,6 +28,9 @@ def main():
         #matrix = np.asmatrix(matrix)
         initial = Node(dim, n_puzzle=matrix)
         initial.printPuzzle()
+    problem = puzzleProblem(initial)
+    print("The location of the blank spot is: ")
+    problem.expandNode(initial)
         
 
     print("1 for Uniform Cost Search")
