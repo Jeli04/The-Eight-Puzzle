@@ -25,7 +25,8 @@ class Node:
 
     ##Gets the index of the "blank" (for us 0) puzzle piece
     def getInitialStateIndex(self):
-        return [[int(item) for array in np.where(self.n_puzzle == 0) for item in array.flatten()][1], [int(item) for array in np.where(self.n_puzzle == 0) for item in array.flatten()][0]] if np.where(self.n_puzzle == 0) else ValueError("Misconfigured puzzle")
+        return [[int(item) for array in np.where(self.n_puzzle == 0) for item in array.flatten()][1], 
+                [int(item) for array in np.where(self.n_puzzle == 0) for item in array.flatten()][0]] if np.where(self.n_puzzle == 0) else ValueError("Misconfigured puzzle")
         #I know this is bad, you don't have to tell me
 
 
@@ -41,7 +42,7 @@ class puzzleProblem:
         # a list of visited nodes 
         self.seen = {}
    
-
+    #Aditi & Jon: implement priority queue
     def expandNode(node):
         # this function will figure out a list of all the valid next states that we can get
         # and order them by cost to add into frontier
@@ -56,5 +57,17 @@ class puzzleProblem:
     def printGoalState(self):
         print(self.goalState)
 
+    #Operators to change 0 -> {some index} to achieve goal state (Vaneeeeesha)
+    def operator_go_left(self):
+        pass
+    
+    def operator_go_right(self):
+        pass
+
+    def operator_go_up(self):
+        pass
+
+    def operator_go_down(self):
+        pass
     
     
