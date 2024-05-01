@@ -1,14 +1,16 @@
 import numpy as np
 from n_puzzle import Node
 from n_puzzle import puzzleProblem
+from a_star import a_star
+
 def main():
     print("Welcome to N-Puzzle Solver")
-    puzzleChoice = int(input("Type “1” to use a default puzzle, or “2” to enter your own puzzle."))
+    puzzleChoice = int(input("Type “1” to use a default puzzle, or “2” to enter your own puzzle.\n"))
     if(puzzleChoice==1):
         initial = Node()
         initial.printPuzzle()
     if(puzzleChoice == 2):
-        dim = int(input("Enter the dimension of your n x n puzzle. Ex. (3 x 3) puzzle, enter 3"))
+        dim = int(input("Enter the dimension of your n x n puzzle. Ex. (3 x 3) puzzle, enter 3\n"))
         print("Enter your puzzle, use a zero to represent the blank")
         print("Enter your rows, use space or tabs between numbers 1 2 3")
         
