@@ -14,20 +14,20 @@ def main():
         print("Enter your puzzle, use a zero to represent the blank")
         print("Enter your rows, use space or tabs between numbers 1 2 3")
         
-        # matrix = np.array([])
-        matrix = []
-
-        for i in range(0, dim):
-            row =[]
-            # row = np.array([])
-            
-            for j in range(0, dim):
-                row.append(int(input("Enter a value: ")))
-            matrix.append(row)
-
-        #matrix = np.asmatrix(matrix)
-        initial = Node(dim, n_puzzle=matrix)
+        # Collect puzzle input as a list of lists
+        matrix_input = []
+        for _ in range(dim):
+            row = list(map(int, input().split()))
+            matrix_input.append(row)
+        
+        # Convert the list of lists to a NumPy array
+        matrix = np.array(matrix_input)
+        
+        initial = Node(dim=int(dim), n_puzzle=matrix)
         initial.printPuzzle()
+    problem = puzzleProblem(initial)
+    print("The location of the blank spot is: ")
+    problem.expandNode(initial)
         
 
     print("1 for Uniform Cost Search")
@@ -35,6 +35,7 @@ def main():
     print("3 for A* with the Euclidean distance heuristic")
     
     algo = int(input("Enter your choice of algorithm: ")) 
+    
 
 if __name__ == '__main__':
     main()

@@ -4,16 +4,18 @@ import heapq
 class Node:
     #Constructor for puzzle node
     def __init__(self, dim = 3, n_puzzle = None, parent = None) -> None:
-        if dim == 3 and n_puzzle == None or dim > 3 and n_puzzle == None:
+        if dim == 3 and n_puzzle is None or dim > 3 and n_puzzle is None:
             self.dim = dim
             self.n_puzzle = np.arange(self.dim * self.dim)
             np.random.shuffle(self.n_puzzle)
             self.n_puzzle = self.n_puzzle.reshape(self.dim, self.dim)
-        elif dim >= 3 and n_puzzle != None:
+        elif n_puzzle is not None and dim >= 3:
             self.dim = dim
             self.n_puzzle = n_puzzle
         elif dim < 3:
             raise ValueError("n_puzzle dimensions must be greater than 2")
+        else:
+            pass
         
         self.parent = parent #For A* star algorithm to keep trace of past heuristic values
         self.heuristic = 0
@@ -43,10 +45,29 @@ class puzzleProblem:
         self.seen = set()
    
     #Aditi & Jon: implement priority queue
-    def expandNode(node):
+    def expandNode(self,node):
         # this function will figure out a list of all the valid next states that we can get
-        # and order them by cost to add into frontier
-        pass
+        dimension= node.dim
+        listOfActions = []
+        index = node.getInitialStateIndex()
+        #print(index[0]) # is col number
+        #print(index[1]) # is row 
+        if index[0]!=(dimension-1):
+            #if not right most column, you can go right
+            listOfActions.append("right")
+        if index[0]!=0:
+            #if not leftmost col, you can go left
+            listOfActions.append("left")
+        if index[1]!=0:
+            #if not topmost row, you can go up
+            listOfActions.append("up")
+        if index[1]!=(dimension-1):
+            #if not bottommost row, you can go down
+            listOfActions.append("down")
+
+        print(index)
+        print(listOfActions)
+        return listOfActions
 
     def isGoal(self) -> bool:
         return self.root == self.goalState
@@ -129,10 +150,10 @@ class puzzleProblem:
         print(f'After down operation:\n{new_node.n_puzzle}')
     
 
-new_node = Node(4)
-print(new_node.getInitialStateIndex())
-new_puzzle = puzzleProblem(new_node)
-new_puzzle.operator_go_left(new_node)
-new_puzzle.operator_go_right(new_node)
-new_puzzle.operator_go_up(new_node)
-new_puzzle.operator_go_down(new_node)
+# new_node = Node(4)
+# print(new_node.getInitialStateIndex())
+# new_puzzle = puzzleProblem(new_node)
+# new_puzzle.operator_go_left(new_node)
+# new_puzzle.operator_go_right(new_node)
+# new_puzzle.operator_go_up(new_node)
+# new_puzzle.operator_go_down(new_node)
