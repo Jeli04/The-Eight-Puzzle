@@ -1,73 +1,77 @@
 import math
+import heapq
 
 class a_star:
     def __init__(self) -> None:
-        # DELETE LATER not sets since we cant hash objects 
-        self.frontier = []  # should sort by ascending f cost
-        self.explored = []
+        pass
 
     '''
         Function: calls A* with a heuristic
         Parameters: the intial game board, and the heuristic name as a string
         Return: Intial state if no solution, A child node if solution exists 
     '''
-    def call_a_star(self, initial_game_board, heuristic_type):
-        self.frontier.append((initial_game_board, 0))
-        while self.frontier.empty()!= True:
-            pair = self.frontier.pop(0)
-            node = pair[0]  # contains the actual object 
-            curr_node_cost = pair[1]    # contrains the numerical cost from start to curr
+    def call_a_star(self, puzzle, heuristic_type):
+        heapq.heappush(puzzle.frontier, (0, puzzle.root))
+        while puzzle.frontier.empty()!= True:
+            pair = heapq.heappop(puzzle.fontier, 0)
+            node = pair[1]  # contains the actual node object 
+            curr_node_cost = node.cost    # contrains the numerical cost from start to curr (g value)
 
             # calculate the g(n) + h(n) cost
             node.totalCost = node.cost + node.heuristic
 
             # check if node is a goal state 
-            if node.is_goal():
-                return self.explored
+            if puzzle.isGoal():
+                return puzzle.seen
             
             # add into explored list 
-            self.explored.append(pair)
+            puzzle.seen.append(pair)
 
             # check each child node created by possible actions
-            for action in node.get_actions():
+            for action in puzzle.expandNode():
                 # spawn the child node based on the action
                 child = None
                 if action == "right":
-                    child = node.go_right()
+                    child = puzzle.operator_go_right()
                 elif action == "left":
-                    child = node.go_left()
+                    child = puzzle.operator_go_left()
                 elif action == "top":
-                    child = node.go_top()
+                    child = puzzle.operator_go_top()
                 elif action == "bottom":
-                    child = node.go_bottom()
+                    child = puzzle.operator_go_bottom()
 
+                """
+                    Might need to change if implmneted in N_puzzle
+                """
                 # calculate the child node g value
-                child_cost = (child.parent.cost + 1) 
+                child_cost = child.parent.cost
 
                 seen = False
-                for pair in self.frontier:
-                    if pair[0].get_board() == child.get_board():
+                for pair in puzzle.frontier:
+                    if pair[1].get_board() == child.get_board():
                         seen = True
                         if child_cost < curr_node_cost:
-                            pair[0].cost = child_cost
-                            pair[0].parent = node
+                            pair[1].cost = child_cost
+                            pair[1].parent = node
 
                 # update child node if smaller cost     
-                for n in self.explored:
-                    if n.get_board() == child.get_board():
-                        seen = True
-                        if child_cost < curr_node_cost:
-                            n.cost = child_cost
-                            n.parent = node
-                            self.frontier.append((n, child_cost + self.heuristic_cost(heuristic_type, child)))
-
+                if seen == False:
+                    for n in puzzle.seen:
+                        if n.get_board() == child.get_board():
+                            seen = True
+                            if child_cost < curr_node_cost:
+                                n.cost = child_cost
+                                n.parent = node
+                                heapq.heappush(puzzle.frontier, ((child_cost + self.heuristic_cost(heuristic_type, child)), n))
+                
                 # add into frontier if never seen yet
                 if seen == False:
                     child.cost = child_cost
                     child.heuristic = self.heuristic_cost(heuristic_type, child)             
                     self.frontier.append((child, child.cost + child.heuristic))
+                    heapq.heappush(puzzle.frontier, ((child, child.cost + child.heuristic), n))
 
-            self.explored.append(node)
+            puzzle.seen.append(node)
 
         return None
 
