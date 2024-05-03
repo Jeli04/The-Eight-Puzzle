@@ -50,18 +50,18 @@ class puzzleProblem:
         dimension= node.dim
         listOfActions = []
         index = node.getInitialStateIndex()
-        #print(index[0]) # is col number
-        #print(index[1]) # is row 
-        if index[0]!=(dimension-1):
+        #print(index[0]) # is row number
+        #print(index[1]) # is col 
+        if index[1]!=(dimension-1):
             #if not right most column, you can go right
             listOfActions.append("right")
-        if index[0]!=0:
+        if index[1]!=0:
             #if not leftmost col, you can go left
             listOfActions.append("left")
-        if index[1]!=0:
+        if index[0]!=0:
             #if not topmost row, you can go up
             listOfActions.append("up")
-        if index[1]!=(dimension-1):
+        if index[0]!=(dimension-1):
             #if not bottommost row, you can go down
             listOfActions.append("down")
 
