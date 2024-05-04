@@ -61,7 +61,7 @@ class a_star:
                 # update child node if smaller cost     
                 if seen == False:
                     for n in puzzle.seen:
-                        if len(puzzle.frontier) > 3: return
+                        # if len(puzzle.frontier) > 3: return
                         print(np.array_equal(n.n_puzzle, child.n_puzzle))
                         print(n.n_puzzle)
                         print(child.n_puzzle)
@@ -101,12 +101,14 @@ class a_star:
     """
     def _misplaced_tile_heuristic(self, child_node):
         cost = 0
-        i = 1
-        for row in child_node.n_puzzle:
-            for tile in row:
-                if i != tile:
+        tracker = 1
+
+        for i in range(child_node.n_puzzle.shape[0]):
+            for j in range(child_node.n_puzzle.shape[1]):
+                if child_node.n_puzzle[i,j] != tracker:
                     cost += 1
-                i+=1
+                tracker+=1
+
         return cost
 
     """
