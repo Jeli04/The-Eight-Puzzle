@@ -75,6 +75,8 @@ class puzzleProblem:
 
         print(f'After left operation:\n{new_node.n_puzzle}')
 
+        return new_node
+
             
     
     def operator_go_right(self, currNode):
@@ -94,6 +96,8 @@ class puzzleProblem:
 
         print(f'After right operation:\n{new_node.n_puzzle}')
 
+        return new_node
+
     def operator_go_up(self, currNode):
         new_node = currNode
         access_node = currNode
@@ -106,10 +110,10 @@ class puzzleProblem:
         new_node.parent = access_node
 
         new_node.cost += 1
-        if (not(access_node in self.seen)):
-            self.seen.add(access_node)
 
         print(f'After up operation:\n{new_node.n_puzzle}')
+
+        return new_node
 
     def operator_go_down(self, currNode):
         new_node = currNode
@@ -127,6 +131,8 @@ class puzzleProblem:
             self.seen.add(access_node)
 
         print(f'After down operation:\n{new_node.n_puzzle}')
+
+        return new_node
     
 
 new_node = Node(4)
