@@ -5,12 +5,12 @@ import copy
 class Node:
     #Constructor for puzzle node
     def __init__(self, dim = 3, n_puzzle = None, parent = None) -> None:
-        self.n_puzzle = None
+        # self.n_puzzle = None
         if dim == 3 and n_puzzle is None or dim > 3 and n_puzzle is None:
             self.dim = dim
             self.n_puzzle = np.arange(self.dim * self.dim)
             np.random.shuffle(self.n_puzzle)
-            self.n_puzzle = self.n_puzzle.reshape(self.dim, self.dim)
+            self.n_puzzle = np.asmatrix(self.n_puzzle.reshape(self.dim, self.dim))
         elif n_puzzle is not None and dim >= 3:
             self.dim = dim
             self.n_puzzle = n_puzzle
@@ -73,7 +73,7 @@ class puzzleProblem:
         return listOfActions
 
     def isGoal(self) -> bool:
-        return self.root is self.goalState
+        return self.root.n_puzzle == self.goalState
 
     def createGoalState(self, dim) -> np.matrix:
         matrix = np.arange(dim * dim).reshape(dim, dim)

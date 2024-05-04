@@ -30,6 +30,9 @@ def main():
     
     # print("\nThe location of the blank spot is: ")
     problem = puzzleProblem(initial)
+    print(initial.n_puzzle)
+    print(problem.goalState)
+    print(problem.isGoal())
         
     print("\n1 for Uniform Cost Search")
     print("2 for A* with the Misplaced Tile heuristic.")
