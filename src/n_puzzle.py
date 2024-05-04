@@ -1,9 +1,11 @@
 import numpy as np
 import heapq
+import copy
 
 class Node:
     #Constructor for puzzle node
     def __init__(self, dim = 3, n_puzzle = None, parent = None) -> None:
+        self.n_puzzle = None
         if dim == 3 and n_puzzle is None or dim > 3 and n_puzzle is None:
             self.dim = dim
             self.n_puzzle = np.arange(self.dim * self.dim)
@@ -33,6 +35,7 @@ class Node:
 
 
 
+
 class puzzleProblem:
     #contains the details of the problem
     #initialize frontier with the first initial state node
@@ -42,7 +45,7 @@ class puzzleProblem:
         self.goalState = self.createGoalState(root.dim)
         self.frontier = []
         # a list of visited nodes 
-        self.seen = set()
+        self.seen = []
    
     #Aditi & Jon: implement priority queue
     def expandNode(self,node):
@@ -80,7 +83,7 @@ class puzzleProblem:
 
     #Operators to change 0 -> {some index} to achieve goal state (Vaneeeeesha)
     def operator_go_left(self, currNode):
-        new_node = currNode
+        new_node = copy.deepcopy(currNode)
         access_node = currNode
 
         currIndex_col = new_node.getInitialStateIndex()[0]
@@ -91,8 +94,6 @@ class puzzleProblem:
         new_node.parent = access_node
 
         new_node.cost += 1
-        if (not(access_node in self.seen)):
-            self.seen.add(access_node)
 
         print(f'After left operation:\n{new_node.n_puzzle}')
 
@@ -101,7 +102,7 @@ class puzzleProblem:
             
     
     def operator_go_right(self, currNode):
-        new_node = currNode
+        new_node = copy.deepcopy(currNode)
         access_node = currNode
 
         currIndex_col = new_node.getInitialStateIndex()[0]
@@ -112,34 +113,30 @@ class puzzleProblem:
         new_node.parent = access_node
 
         new_node.cost += 1
-        if (not(access_node in self.seen)):
-            self.seen.add(access_node)
 
         print(f'After right operation:\n{new_node.n_puzzle}')
 
         return new_node
 
     def operator_go_up(self, currNode):
-        new_node = currNode
+        new_node = copy.deepcopy(currNode)
         access_node = currNode
 
-        currIndex_col = new_node.getInitialStateIndex()[0]
-        currIndex_row = new_node.getInitialStateIndex()[1]
+        currIndex_col = currNode.getInitialStateIndex()[0]
+        currIndex_row = currNode.getInitialStateIndex()[1]
         print(f'Before up operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col - 1, currIndex_row] = new_node.n_puzzle[currIndex_col - 1, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
 
         new_node.cost += 1
-        if (not(access_node in self.seen)):
-            self.seen.add(access_node)
 
         print(f'After up operation:\n{new_node.n_puzzle}')
 
         return new_node
 
     def operator_go_down(self, currNode):
-        new_node = currNode
+        new_node = copy.deepcopy(currNode)
         access_node = currNode
 
         currIndex_col = new_node.getInitialStateIndex()[0]
@@ -150,8 +147,6 @@ class puzzleProblem:
         new_node.parent = access_node
 
         new_node.cost += 1
-        if (not(access_node in self.seen)):
-            self.seen.add(access_node)
 
         print(f'After down operation:\n{new_node.n_puzzle}')
 

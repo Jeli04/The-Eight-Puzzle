@@ -13,8 +13,8 @@ class a_star:
     '''
     def call_a_star(self, puzzle, heuristic_type):
         heapq.heappush(puzzle.frontier, (0, puzzle.root))
-        while puzzle.frontier.empty()!= True:
-            pair = heapq.heappop(puzzle.frontier, 0)
+        while len(puzzle.frontier) > 0:
+            pair = heapq.heappop(puzzle.frontier)
             node = pair[1]  # contains the actual node object 
             curr_node_cost = node.cost    # contrains the numerical cost from start to curr (g value)
 
@@ -26,20 +26,20 @@ class a_star:
                 return puzzle.seen
             
             # add into explored list 
-            puzzle.seen.append(pair)
+            puzzle.seen.append(node)
 
             # check each child node created by possible actions
-            for action in puzzle.expandNode():
+            for action in puzzle.expandNode(node):
                 # spawn the child node based on the action
                 child = None
                 if action == "right":
-                    child = puzzle.operator_go_right()
+                    child = puzzle.operator_go_right(node)
                 elif action == "left":
-                    child = puzzle.operator_go_left()
-                elif action == "top":
-                    child = puzzle.operator_go_top()
-                elif action == "bottom":
-                    child = puzzle.operator_go_bottom()
+                    child = puzzle.operator_go_left(node)
+                elif action == "up":
+                    child = puzzle.operator_go_up(node)
+                elif action == "down":
+                    child = puzzle.operator_go_down(node)
 
                 """
                     Might need to change if implmneted in N_puzzle
@@ -49,7 +49,7 @@ class a_star:
 
                 seen = False
                 for pair in puzzle.frontier:
-                    if pair[1].get_board() == child.get_board():
+                    if (pair[1].n_puzzle == child.n_puzzle).all():
                         seen = True
                         if child_cost < curr_node_cost:
                             pair[1].cost = child_cost
@@ -58,7 +58,7 @@ class a_star:
                 # update child node if smaller cost     
                 if seen == False:
                     for n in puzzle.seen:
-                        if n.get_board() == child.get_board():
+                        if (n.n_puzzle == child.n_puzzle).all():
                             seen = True
                             if child_cost < curr_node_cost:
                                 n.cost = child_cost
@@ -69,8 +69,7 @@ class a_star:
                 if seen == False:
                     child.cost = child_cost
                     child.heuristic = self.heuristic_cost(heuristic_type, child)             
-                    self.frontier.append((child, child.cost + child.heuristic))
-                    heapq.heappush(puzzle.frontier, ((child, child.cost + child.heuristic), n))
+                    heapq.heappush(puzzle.frontier, ((child.cost + child.heuristic), n))
 
             puzzle.seen.append(node)
 
@@ -92,7 +91,7 @@ class a_star:
     def _misplaced_tile_heuristic(self, child_node):
         cost = 0
         i = 1
-        for row in child_node.get_board():
+        for row in child_node.n_puzzle:
             for tile in row:
                 if i != tile:
                     cost += 1
@@ -109,9 +108,9 @@ class a_star:
         cost = 0
         curr_row = 0
         curr_column = 0
-        dimensionality = len(child_node.get_board()[0])
+        dimensionality = len(child_node.n_puzzle[0])
         correct_val = 1 #meant to indicate what the correct tile at that location in the grid is
-        for row in child_node.get_board():
+        for row in child_node.n_puzzle:
             for tile in row:
                 if(correct_val != child_node[row][tile]):
                     goal_row = correct_val / dimensionality
