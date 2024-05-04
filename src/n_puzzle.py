@@ -76,7 +76,10 @@ class puzzleProblem:
         return self.root is self.goalState
 
     def createGoalState(self, dim) -> np.matrix:
-        return np.asmatrix(np.arange(dim * dim).reshape(dim, dim))
+        matrix = np.arange(dim * dim).reshape(dim, dim)
+        matrix += 1
+        matrix[dim - 1, dim - 1] = 0
+        return np.asmatrix(matrix)
     
     def printGoalState(self):
         print(self.goalState)
@@ -153,10 +156,7 @@ class puzzleProblem:
         return new_node
     
 
-# new_node = Node(4)
-# print(new_node.getInitialStateIndex())
-# new_puzzle = puzzleProblem(new_node)
-# new_puzzle.operator_go_left(new_node)
-# new_puzzle.operator_go_right(new_node)
-# new_puzzle.operator_go_up(new_node)
-# new_puzzle.operator_go_down(new_node)
+
+puzzle = puzzleProblem(Node(4))
+
+puzzle.printGoalState()

@@ -16,7 +16,7 @@ def main():
         print("Enter your puzzle, use a zero to represent the blank")
         print("Enter your rows, use space or tabs between numbers 1 2 3")
         
-        # Collect puzzle input as a list of lists
+        # Collect puzzle input as a list of list1s
         matrix_input = []
         for _ in range(dim):
             row = list(map(int, input().split()))
