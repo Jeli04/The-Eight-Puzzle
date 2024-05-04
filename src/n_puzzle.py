@@ -159,4 +159,8 @@ class puzzleProblem:
 
 puzzle = puzzleProblem(Node(4))
 
+print(Node(4))
+
 puzzle.printGoalState()
+
+print(puzzle.isGoal())
