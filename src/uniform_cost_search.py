@@ -4,62 +4,78 @@ from n_puzzle import Node
 from n_puzzle import puzzleProblem
 
 class uniform_cost_search:
-    def execute_ucs(initial_game_board):
-        frontier.heappush((0, initial_game_board))
+    def execute_ucs(self, game):
         
-        while frontier.empty() != True:
-            pair = frontier.heappop
+        heapq.heappush(game.frontier, (0, game))
+        
+        while game.frontier:
+            pair = heapq.heappop(game.frontier)
+            # print("hellooooo")
+            # print(pair[0])
+            # print(pair[1].root.printPuzzle())
             cur_cost = pair[0]
-            node = pair[1]
-        
+            puzzle = pair[1] # we actually want current!
+            
             # return current state if goal is found
-            if node.is_goal():
-                return node
+            if puzzle.isGoal():
+                print("fgfv")
+                return puzzle
+            else:
+                print("im not the goal!!!!!")
        
             # mark current node as visited
-            seen.append(pair)
+            game.seen.add(pair)
             
             # obtain child node from all 4 possible operators
-            for action in node.get_actions():
+            for action in puzzle.expandNode(puzzle.root):
                 child = None
+                current = puzzle.root
                 
                 if action == "right":
-                    child = node.go_right()
+                    print("right")
+                    child = puzzle.operator_go_right(current)
                 elif action == "left":
-                    child = node.go_left()
-                elif action == "top":
-                    child = node.go_top()
-                elif action == "bottom":
-                    child = node.go_bottom()
+                    child = puzzle.operator_go_left(current)
+                    print("left")
+                elif action == "up":
+                    child = puzzle.operator_go_top(current)
+                    print("up")
+                elif action == "down":
+                    child = puzzle.operator_go_bottom(current)
+                    print("down")
             
                 # calculate the child node cost (delete later)
-                child_cost = child.parent.cost + 1
+                # child_cost = child.parent.cost + 1 //already in n_puzzle
                 
-                seen = False
+                visited = False
+                
+                #get child cost (child.cost) to use below
+               
                 
                 # update child node if smaller cost is found
-                for pair in frontier:
+                for pair in game.frontier:
                     if pair[1].get_board() == child.get_board():
-                        seen = True
+                        visited = True
                         
                         if child_cost < cur_cost:
                             pair[1].cost = child_cost
                             pair[1].parent = node
                 
-                for item in seen:
+                for item in game.seen:
                     if item.get_board() == child.get_board():
-                        seen = True
+                        visited = True
                         
                         if child_cost < cur_cost:
                             item.cost = child_cost
                             item.parent = node
-                            frontier.heappush((child_cost, item))
+                            game.frontier.heappush((child_cost, item))
                 
                 # add into frontier if never seen yet
-                if seen == False:
+                if visited == False:
                     child.cost = child_cost
-                    frontier.heappush((child_cost, child))
+                    game.frontier.heappush((child_cost, child))
                 
-            seen.append(node)
+            game.seen.append(node)
         
         return None
+    

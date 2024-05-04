@@ -99,13 +99,13 @@ class a_star:
                 i+=1
         return cost
 
-
     """
         Function: return the heuristic cost with euclidean distance for each tile
         Parameters: A possible child node
         Return: Heuristic cost of child node
     """
     def _euclidean_distance_heuristic(child_node):
+
         cost = 0
         curr_row = 0
         curr_column = 0
