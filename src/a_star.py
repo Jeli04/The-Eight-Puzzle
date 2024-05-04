@@ -14,7 +14,7 @@ class a_star:
     def call_a_star(self, puzzle, heuristic_type):
         heapq.heappush(puzzle.frontier, (0, puzzle.root))
         while puzzle.frontier.empty()!= True:
-            pair = heapq.heappop(puzzle.fontier, 0)
+            pair = heapq.heappop(puzzle.frontier, 0)
             node = pair[1]  # contains the actual node object 
             curr_node_cost = node.cost    # contrains the numerical cost from start to curr (g value)
 
