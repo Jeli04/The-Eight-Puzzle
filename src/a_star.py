@@ -1,68 +1,89 @@
 import math
+import heapq
+
 
 class a_star:
-    # def __init__(self) -> None:
-    #     self.frontier = []
-    #     self.explored = []
-
+    def __init__(self) -> None:
+        pass
 
     '''
         Function: calls A* with a heuristic
         Parameters: the intial game board, and the heuristic name as a string
         Return: Intial state if no solution, A child node if solution exists 
     '''
-    def call_a_star(self, game, heuristic):
-        game.frontier.append((game, 0))
-        while game.frontier.empty()!= True:
-            pair = game.frontier.pop(0)
-            node = pair[0]
-            curr_node_cost = pair[1]
+    def call_a_star(self, puzzle, heuristic_type):
+        heapq.heappush(puzzle.frontier, (0, puzzle.root))
+        while puzzle.frontier.empty()!= True:
+            pair = heapq.heappop(puzzle.frontier, 0)
+            node = pair[1]  # contains the actual node object 
+            curr_node_cost = node.cost    # contrains the numerical cost from start to curr (g value)
+
+            # calculate the g(n) + h(n) cost
+            node.totalCost = node.cost + node.heuristic
 
             # check if node is a goal state 
-            if node.is_goal():
-                return node
+            if puzzle.isGoal():
+                return puzzle.seen
             
             # add into explored list 
-            game.seen.append(pair)
+            puzzle.seen.append(pair)
 
             # check each child node created by possible actions
-            for action in node.get_actions():
+            for action in puzzle.expandNode():
                 # spawn the child node based on the action
                 child = None
                 if action == "right":
-                    child = node.go_right()
+                    child = puzzle.operator_go_right()
                 elif action == "left":
-                    child = node.go_left()
+                    child = puzzle.operator_go_left()
                 elif action == "top":
-                    child = node.go_top()
+                    child = puzzle.operator_go_top()
                 elif action == "bottom":
-                    child = node.go_bottom()
+                    child = puzzle.operator_go_bottom()
 
-                # calculate the g(n) + h(n) cost
-                heuristic_cost = 0
-                if heuristic == "misplaced": heuristic_cost = game._misplaced_tile_heuristic(child)
-                if heuristic == "euclidean": heuristic_cost = game._euclidean_distance_heuristic(child)
-                child_cost = node.start_to_curr_cost + heuristic_cost
+                """
+                    Might need to change if implmneted in N_puzzle
+                """
+                # calculate the child node g value
+                child_cost = child.parent.cost
 
+                seen = False
+                for pair in puzzle.frontier:
+                    if pair[1].get_board() == child.get_board():
+                        seen = True
+                        if child_cost < curr_node_cost:
+                            pair[1].cost = child_cost
+                            pair[1].parent = node
+
+                # update child node if smaller cost     
+                if seen == False:
+                    for n in puzzle.seen:
+                        if n.get_board() == child.get_board():
+                            seen = True
+                            if child_cost < curr_node_cost:
+                                n.cost = child_cost
+                                n.parent = node
+                                heapq.heappush(puzzle.frontier, ((child_cost + self.heuristic_cost(heuristic_type, child)), n))
+                
                 # add into frontier if never seen yet
-                if child not in game.frontier or child not in game.seen:
-                    game.frontier.append((child, heuristic_cost))
+                if seen == False:
+                    child.cost = child_cost
+                    child.heuristic = self.heuristic_cost(heuristic_type, child)             
+                    self.frontier.append((child, child.cost + child.heuristic))
+                    heapq.heappush(puzzle.frontier, ((child, child.cost + child.heuristic), n))
 
-                # update child node if smaller cost
-                elif child_cost < curr_node_cost and child in game.seen:
-                    child.start_to_curr_cost = child_cost
-                    child.parent = node
-                    # remove the child node from explored 
+            puzzle.seen.append(node)
 
-                elif child_cost < curr_node_cost and child in game.frontier:
-                    child.start_to_curr_cost = child_cost
-                    child.parent = node
+        return None
 
-            game.seen.append((node, curr_node_cost))
-
-
-        return game
+    # helper function
+    def heuristic_cost(self, heuristic, child):
+        heuristic_cost = 0
+        if heuristic == "misplaced": heuristic_cost = self._misplaced_tile_heuristic(child)
+        if heuristic == "euclidean": heuristic_cost = self._euclidean_distance_heuristic(child)
+        return heuristic_cost
         
+
     """
         Function: returns the heuristic cost of misplaced tile
         Parameters: A possible child node
@@ -78,16 +99,21 @@ class a_star:
                 i+=1
         return cost
 
+    """
+        Function: return the heuristic cost with euclidean distance for each tile
+        Parameters: A possible child node
+        Return: Heuristic cost of child node
+    """
+    def _euclidean_distance_heuristic(child_node):
 
-    def _euclidean_distance_heuristic(self, game_board):
         cost = 0
         curr_row = 0
         curr_column = 0
-        dimensionality = len(game_board.get_board()[0])
+        dimensionality = len(child_node.get_board()[0])
         correct_val = 1 #meant to indicate what the correct tile at that location in the grid is
-        for row in game_board.get_board():
+        for row in child_node.get_board():
             for tile in row:
-                if(correct_val != game_board[row][tile]):
+                if(correct_val != child_node[row][tile]):
                     goal_row = correct_val / dimensionality
                     goal_column = (correct_val % dimensionality) - 1
 
