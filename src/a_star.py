@@ -1,6 +1,7 @@
 import math
 import heapq
 
+
 class a_star:
     def __init__(self) -> None:
         pass
