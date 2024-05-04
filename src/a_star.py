@@ -1,9 +1,9 @@
 import math
 
 class a_star:
-    def __init__(self) -> None:
-        self.frontier = []
-        self.explored = []
+    # def __init__(self) -> None:
+    #     self.frontier = []
+    #     self.explored = []
 
 
     '''
@@ -11,10 +11,10 @@ class a_star:
         Parameters: the intial game board, and the heuristic name as a string
         Return: Intial state if no solution, A child node if solution exists 
     '''
-    def call_a_star(self, initial_game_board, heuristic):
-        self.frontier.append((initial_game_board, 0))
-        while self.frontier.empty()!= True:
-            pair = self.frontier.pop(0)
+    def call_a_star(self, game, heuristic):
+        game.frontier.append((game, 0))
+        while game.frontier.empty()!= True:
+            pair = game.frontier.pop(0)
             node = pair[0]
             curr_node_cost = pair[1]
 
@@ -23,7 +23,7 @@ class a_star:
                 return node
             
             # add into explored list 
-            self.explored.append(pair)
+            game.seen.append(pair)
 
             # check each child node created by possible actions
             for action in node.get_actions():
@@ -40,28 +40,28 @@ class a_star:
 
                 # calculate the g(n) + h(n) cost
                 heuristic_cost = 0
-                if heuristic == "misplaced": heuristic_cost = self._misplaced_tile_heuristic(child)
-                if heuristic == "euclidean": heuristic_cost = self._euclidean_distance_heuristic(child)
+                if heuristic == "misplaced": heuristic_cost = game._misplaced_tile_heuristic(child)
+                if heuristic == "euclidean": heuristic_cost = game._euclidean_distance_heuristic(child)
                 child_cost = node.start_to_curr_cost + heuristic_cost
 
                 # add into frontier if never seen yet
-                if child not in self.frontier or child not in self.explored:
-                    self.frontier.append((child, heuristic_cost))
+                if child not in game.frontier or child not in game.seen:
+                    game.frontier.append((child, heuristic_cost))
 
                 # update child node if smaller cost
-                elif child_cost < curr_node_cost and child in self.explored:
+                elif child_cost < curr_node_cost and child in game.seen:
                     child.start_to_curr_cost = child_cost
                     child.parent = node
                     # remove the child node from explored 
 
-                elif child_cost < curr_node_cost and child in self.frontier:
+                elif child_cost < curr_node_cost and child in game.frontier:
                     child.start_to_curr_cost = child_cost
                     child.parent = node
 
-            self.explored.append((node, curr_node_cost))
+            game.seen.append((node, curr_node_cost))
 
 
-        return initial_game_board
+        return game
         
     """
         Function: returns the heuristic cost of misplaced tile
@@ -79,7 +79,7 @@ class a_star:
         return cost
 
 
-    def _euclidean_distance_heuristic(game_board):
+    def _euclidean_distance_heuristic(self, game_board):
         cost = 0
         curr_row = 0
         curr_column = 0

@@ -65,12 +65,12 @@ class puzzleProblem:
             #if not bottommost row, you can go down
             listOfActions.append("down")
 
-        print(index)
-        print(listOfActions)
+        # print(index)
+        #print(listOfActions)
         return listOfActions
 
     def isGoal(self) -> bool:
-        return self.root == self.goalState
+        return self.root is self.goalState
 
     def createGoalState(self, dim) -> np.matrix:
         return np.asmatrix(np.arange(dim * dim).reshape(dim, dim))
