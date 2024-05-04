@@ -73,7 +73,7 @@ class puzzleProblem:
         return listOfActions
 
     def isGoal(self) -> bool:
-        return self.root.n_puzzle == self.goalState
+        return np.array_equal(self.root.n_puzzle, self.goalState)
 
     def createGoalState(self, dim) -> np.matrix:
         matrix = np.arange(dim * dim).reshape(dim, dim)
