@@ -22,7 +22,15 @@ class Node:
         self.parent = parent #For A* star algorithm to keep trace of past heuristic values
         self.heuristic = 0
         self.cost = 0 
-        self.totalCost = self.heuristic + self.cost   
+        self.totalCost = self.heuristic + self.cost  
+
+    def __lt__(self, other):
+        # Compare based on total cost as the primary criterion
+        return (self.cost + self.heuristic) < (other.cost + other.heuristic)
+
+    # Optionally, implement other comparison methods
+    def __eq__(self, other):
+        return (self.cost + self.heuristic) == (other.cost + other.heuristic) 
             
     ##Prints the puzzle at the current state
     def printPuzzle(self):
@@ -53,6 +61,8 @@ class puzzleProblem:
         dimension= node.dim
         listOfActions = []
         index = node.getInitialStateIndex()
+
+        print("index: ", index)
         #print(index[0]) # is row number
         #print(index[1]) # is col 
         if index[1]!=(dimension-1):
@@ -97,6 +107,8 @@ class puzzleProblem:
 
         print(f'After left operation:\n{new_node.n_puzzle}')
 
+        print("currNode:", currNode)
+        print("deep copy:", new_node)
         return new_node
 
             
@@ -116,6 +128,8 @@ class puzzleProblem:
 
         print(f'After right operation:\n{new_node.n_puzzle}')
 
+        print("currNode:", currNode)
+        print("deep copy:", new_node)
         return new_node
 
     def operator_go_up(self, currNode):
@@ -133,6 +147,8 @@ class puzzleProblem:
 
         print(f'After up operation:\n{new_node.n_puzzle}')
 
+        print("currNode:", currNode)
+        print("deep copy:", new_node)
         return new_node
 
     def operator_go_down(self, currNode):
@@ -148,6 +164,8 @@ class puzzleProblem:
 
         new_node.cost += 1
 
+        print("currNode:", currNode)
+        print("deep copy:", new_node)
         print(f'After down operation:\n{new_node.n_puzzle}')
 
         return new_node

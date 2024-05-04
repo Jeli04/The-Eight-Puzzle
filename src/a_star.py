@@ -1,6 +1,6 @@
 import math
 import heapq
-
+import numpy as np
 
 class a_star:
     def __init__(self) -> None:
@@ -14,7 +14,9 @@ class a_star:
     def call_a_star(self, puzzle, heuristic_type):
         heapq.heappush(puzzle.frontier, (0, puzzle.root))
         while len(puzzle.frontier) > 0:
-            pair = heapq.heappop(puzzle.frontier)
+            pair = puzzle.frontier[0]
+            heapq.heappop(puzzle.frontier)
+            
             node = pair[1]  # contains the actual node object 
             curr_node_cost = node.cost    # contrains the numerical cost from start to curr (g value)
 
@@ -30,6 +32,8 @@ class a_star:
 
             # check each child node created by possible actions
             for action in puzzle.expandNode(node):
+                # print(len(puzzle.frontier))
+        
                 # spawn the child node based on the action
                 child = None
                 if action == "right":
@@ -41,35 +45,42 @@ class a_star:
                 elif action == "down":
                     child = puzzle.operator_go_down(node)
 
-                """
-                    Might need to change if implmneted in N_puzzle
-                """
                 # calculate the child node g value
                 child_cost = child.parent.cost
+                
 
                 seen = False
                 for pair in puzzle.frontier:
-                    if (pair[1].n_puzzle == child.n_puzzle).all():
+                    if np.array_equal(pair[1].n_puzzle, child.n_puzzle):
                         seen = True
                         if child_cost < curr_node_cost:
                             pair[1].cost = child_cost
                             pair[1].parent = node
+                            break
 
                 # update child node if smaller cost     
                 if seen == False:
                     for n in puzzle.seen:
-                        if (n.n_puzzle == child.n_puzzle).all():
+                        if len(puzzle.frontier) > 3: return
+                        print(np.array_equal(n.n_puzzle, child.n_puzzle))
+                        print(n.n_puzzle)
+                        print(child.n_puzzle)
+                        if np.array_equal(n.n_puzzle, child.n_puzzle):
                             seen = True
                             if child_cost < curr_node_cost:
+                                print("REACHED")
                                 n.cost = child_cost
                                 n.parent = node
                                 heapq.heappush(puzzle.frontier, ((child_cost + self.heuristic_cost(heuristic_type, child)), n))
-                
+                                break
+
                 # add into frontier if never seen yet
                 if seen == False:
+                    print("push into heap")
+                    print(puzzle.frontier)
                     child.cost = child_cost
                     child.heuristic = self.heuristic_cost(heuristic_type, child)             
-                    heapq.heappush(puzzle.frontier, ((child.cost + child.heuristic), n))
+                    heapq.heappush(puzzle.frontier, (child.cost + child.heuristic, child))
 
             puzzle.seen.append(node)
 
