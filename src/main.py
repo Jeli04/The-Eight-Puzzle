@@ -16,7 +16,7 @@ def main():
         print("Enter your puzzle, use a zero to represent the blank")
         print("Enter your rows, use space or tabs between numbers 1 2 3")
         
-        # Collect puzzle input as a list of lists
+        # Collect puzzle input as a list of list1s
         matrix_input = []
         for _ in range(dim):
             row = list(map(int, input().split()))
@@ -30,6 +30,9 @@ def main():
     
     # print("\nThe location of the blank spot is: ")
     problem = puzzleProblem(initial)
+    print(initial.n_puzzle)
+    print(problem.goalState)
+    print(problem.isGoal())
         
     print("\n1 for Uniform Cost Search")
     print("2 for A* with the Misplaced Tile heuristic.")

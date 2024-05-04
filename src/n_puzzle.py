@@ -5,12 +5,12 @@ import copy
 class Node:
     #Constructor for puzzle node
     def __init__(self, dim = 3, n_puzzle = None, parent = None) -> None:
-        self.n_puzzle = None
+        # self.n_puzzle = None
         if dim == 3 and n_puzzle is None or dim > 3 and n_puzzle is None:
             self.dim = dim
             self.n_puzzle = np.arange(self.dim * self.dim)
             np.random.shuffle(self.n_puzzle)
-            self.n_puzzle = self.n_puzzle.reshape(self.dim, self.dim)
+            self.n_puzzle = np.asmatrix(self.n_puzzle.reshape(self.dim, self.dim))
         elif n_puzzle is not None and dim >= 3:
             self.dim = dim
             self.n_puzzle = n_puzzle
@@ -83,10 +83,13 @@ class puzzleProblem:
         return listOfActions
 
     def isGoal(self) -> bool:
-        return self.root is self.goalState
+        return np.array_equal(self.root.n_puzzle, self.goalState)
 
     def createGoalState(self, dim) -> np.matrix:
-        return np.asmatrix(np.arange(dim * dim).reshape(dim, dim))
+        matrix = np.arange(dim * dim).reshape(dim, dim)
+        matrix += 1
+        matrix[dim - 1, dim - 1] = 0
+        return np.asmatrix(matrix)
     
     def printGoalState(self):
         print(self.goalState)
@@ -171,10 +174,11 @@ class puzzleProblem:
         return new_node
     
 
-# new_node = Node(4)
-# print(new_node.getInitialStateIndex())
-# new_puzzle = puzzleProblem(new_node)
-# new_puzzle.operator_go_left(new_node)
-# new_puzzle.operator_go_right(new_node)
-# new_puzzle.operator_go_up(new_node)
-# new_puzzle.operator_go_down(new_node)
+
+puzzle = puzzleProblem(Node(4))
+
+print(Node(4))
+
+puzzle.printGoalState()
+
+print(puzzle.isGoal())
