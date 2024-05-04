@@ -32,9 +32,9 @@ class a_star:
                 # spawn the child node based on the action
                 child = None
                 if action == "right":
-                    child = puzzle.operator_go_right()
+                    child = puzzle.operator_go_right(node)
                 elif action == "left":
-                    child = puzzle.operator_go_left()
+                    child = puzzle.operator_go_left(node)
                 elif action == "top":
                     child = puzzle.operator_go_top()
                 elif action == "bottom":
