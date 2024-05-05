@@ -26,15 +26,15 @@ class a_star:
             node.totalCost = node.cost + node.heuristic
 
             # check if node is a goal state 
-            print("check before solution: ", node.n_puzzle)
-            print("goal state: ", puzzle.goalState)
-            print(puzzle.isGoal(node))
+            # print("check before solution: ", node.n_puzzle)
+            # print("goal state: ", puzzle.goalState)
+            # print(puzzle.isGoal(node))
             if puzzle.isGoal(node):
                 return puzzle.seen
             
             # add into explored list 
             puzzle.seen[puzzle.toString(node)] = node
-
+            print(len(puzzle.seen))
             # check each child node created by possible actions
             for action in puzzle.expandNode(node):
                 # print(len(puzzle.frontier))
@@ -51,21 +51,23 @@ class a_star:
                     child = puzzle.operator_go_down(node)
 
                 # calculate the child node g value
-                child_cost = child.parent.cost
+                child_cost = child.parent.cost + 1
                             
                 seen = False
 
                 # update child node if smaller cost     
                 puzzleString = puzzle.toString(child)
                 if seen == False and puzzleString in puzzle.seen and child_cost < curr_node_cost:
+                    # if len(puzzle.frontier) > 5: return
+                    # print(puzzleString)
                     seen = True
                     seenNode = puzzle.seen[puzzleString]
                     seenNode.cost = child_cost
                     seenNode.parent = node
                     heapq.heappush(puzzle.frontier, ((child_cost + self.heuristic_cost(heuristic_type, child)), seenNode))
-                    print("Before delete ", len(puzzle.seen))
+                    # print("Before delete ", len(puzzle.seen))
                     del puzzle.seen[puzzleString]
-                    print("After delete ", len(puzzle.seen))
+                    # print("After delete ", len(puzzle.seen))
                 else:
                     for pair in puzzle.frontier:
                         # if len(puzzle.frontier) > 5: return

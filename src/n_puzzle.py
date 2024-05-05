@@ -105,14 +105,14 @@ class puzzleProblem:
 
         currIndex_col = new_node.getInitialStateIndex()[0]
         currIndex_row = new_node.getInitialStateIndex()[1]
-        print(f'Before left operation:\n{new_node.n_puzzle}\n')
+        # print(f'Before left operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row - 1] = new_node.n_puzzle[currIndex_col, currIndex_row - 1], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
 
         new_node.cost += 1
 
-        print(f'After left operation:\n{new_node.n_puzzle}')
+        # print(f'After left operation:\n{new_node.n_puzzle}')
 
         # print("currNode:", currNode)
         # print("deep copy:", new_node)
@@ -126,14 +126,14 @@ class puzzleProblem:
 
         currIndex_col = new_node.getInitialStateIndex()[0]
         currIndex_row = new_node.getInitialStateIndex()[1]
-        print(f'Before right operation:\n{new_node.n_puzzle}\n')
+        # print(f'Before right operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row + 1] = new_node.n_puzzle[currIndex_col, currIndex_row + 1], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
 
         new_node.cost += 1
 
-        print(f'After right operation:\n{new_node.n_puzzle}')
+        # print(f'After right operation:\n{new_node.n_puzzle}')
 
         # print("currNode:", currNode)
         # print("deep copy:", new_node)
@@ -145,14 +145,14 @@ class puzzleProblem:
 
         currIndex_col = currNode.getInitialStateIndex()[0]
         currIndex_row = currNode.getInitialStateIndex()[1]
-        print(f'Before up operation:\n{new_node.n_puzzle}\n')
+        # print(f'Before up operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col - 1, currIndex_row] = new_node.n_puzzle[currIndex_col - 1, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
 
         new_node.cost += 1
 
-        print(f'After up operation:\n{new_node.n_puzzle}')
+        # print(f'After up operation:\n{new_node.n_puzzle}')
 
         # print("currNode:", currNode)
         # print("deep copy:", new_node)
@@ -164,7 +164,7 @@ class puzzleProblem:
 
         currIndex_col = new_node.getInitialStateIndex()[0]
         currIndex_row = new_node.getInitialStateIndex()[1]
-        print(f'Before down operation:\n{new_node.n_puzzle}\n')
+        # print(f'Before down operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col + 1, currIndex_row] = new_node.n_puzzle[currIndex_col + 1, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
@@ -173,7 +173,7 @@ class puzzleProblem:
 
         # print("currNode:", currNode)
         # print("deep copy:", new_node)
-        print(f'After down operation:\n{new_node.n_puzzle}')
+        # print(f'After down operation:\n{new_node.n_puzzle}')
 
         return new_node
     
