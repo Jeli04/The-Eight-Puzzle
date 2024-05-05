@@ -50,7 +50,7 @@ class puzzleProblem:
     def Solvable(self, node) -> bool:
         inversions = 0
 
-        flatten_board = [val for row in node for val in row if val != 0]
+        flatten_board = [val for row in node.n_puzzle for val in row if val != 0]
         total_size = len(flatten_board)
         for i in range(total_size):
             for j in range(i + 1, total_size):
