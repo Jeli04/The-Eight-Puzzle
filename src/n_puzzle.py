@@ -5,7 +5,6 @@ import copy
 class Node:
     #Constructor for puzzle node
     def __init__(self, dim = 3, n_puzzle = None, parent = None) -> None:
-        # self.n_puzzle = None
         if dim == 3 and n_puzzle is None or dim > 3 and n_puzzle is None:
             self.dim = dim
             self.n_puzzle = np.arange(self.dim * self.dim)
@@ -39,7 +38,6 @@ class Node:
     ##Gets the index of the "blank" (for us 0) puzzle piece
     def getInitialStateIndex(self):
         return [np.where(self.n_puzzle == 0)[0][0], np.where(self.n_puzzle == 0)[1][0]]
-        #I know this is bad, you don't have to tell me
 
 
 
@@ -105,7 +103,6 @@ class puzzleProblem:
 
         currIndex_col = new_node.getInitialStateIndex()[0]
         currIndex_row = new_node.getInitialStateIndex()[1]
-        # print(f'Before left operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row - 1] = new_node.n_puzzle[currIndex_col, currIndex_row - 1], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
@@ -126,7 +123,6 @@ class puzzleProblem:
 
         currIndex_col = new_node.getInitialStateIndex()[0]
         currIndex_row = new_node.getInitialStateIndex()[1]
-        # print(f'Before right operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row + 1] = new_node.n_puzzle[currIndex_col, currIndex_row + 1], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
@@ -145,7 +141,6 @@ class puzzleProblem:
 
         currIndex_col = currNode.getInitialStateIndex()[0]
         currIndex_row = currNode.getInitialStateIndex()[1]
-        # print(f'Before up operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col - 1, currIndex_row] = new_node.n_puzzle[currIndex_col - 1, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
@@ -164,7 +159,6 @@ class puzzleProblem:
 
         currIndex_col = new_node.getInitialStateIndex()[0]
         currIndex_row = new_node.getInitialStateIndex()[1]
-        # print(f'Before down operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col + 1, currIndex_row] = new_node.n_puzzle[currIndex_col + 1, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
