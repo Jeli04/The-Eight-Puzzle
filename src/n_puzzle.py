@@ -53,6 +53,33 @@ class puzzleProblem:
         # a list of visited nodes 
         self.seen = {}
    
+    def Solvable(self, node) -> bool:
+        inversions = 0
+
+        #flattening matrix into a list and removing the blank
+        flatten_board = [val for row in node.n_puzzle for val in row if val != 0]
+        total_size = len(flatten_board)
+
+        #finding the amount of inversions
+        for i in range(total_size):
+            for j in range(i + 1, total_size):
+                if flatten_board[i] > flatten_board[j]:
+                    inversions += 1
+
+        if(((node.dim) % 2) == 1) and ((inversions % 2) == 0):
+            return True
+        
+        if((((node.dim) % 2) == 0) and (((node.getInitialStateIndex()[0]) % 2) == 1) and ((inversions % 2) == 1)):
+            return True
+        
+        if((((node.dim) % 2) == 0) and (((node.getInitialStateIndex()[0]) % 2) == 0) and ((inversions % 2) == 0)):
+            return True
+        
+        return False
+
+
+                
+
     #Aditi & Jon: implement priority queue
     def expandNode(self,node):
         # this function will figure out a list of all the valid next states that we can get
