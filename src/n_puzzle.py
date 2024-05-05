@@ -33,7 +33,8 @@ class Node:
         inversions = 0
 
         #flattening matrix into a list and removing the blank
-        flatten_board = [val for row in self.n_puzzle for val in row if val != 0]
+        flatten_board = self.n_puzzle.flatten()
+        flatten_board = flatten_board[flatten_board != 0]
         total_size = len(flatten_board)
 
         #finding the amount of inversions
