@@ -43,7 +43,6 @@ def main():
     if (algo == 1):
         object = uniform_cost_search()
         object.execute_ucs(problem)
-        #print(object.execute_ucs(problem))
     elif (algo == 2):
         object = a_star()
         print(f"Starting State:\n {initial.n_puzzle}")

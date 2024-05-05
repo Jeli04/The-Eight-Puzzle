@@ -11,6 +11,7 @@ class Node:
             np.random.shuffle(self.n_puzzle)
 
             while (self.Solvable() == False):
+                print("This is invalid puzzle, generating a valid one.")
                 self.n_puzzle = np.arange(self.dim * self.dim)
                 np.random.shuffle(self.n_puzzle)
 
@@ -33,7 +34,8 @@ class Node:
         inversions = 0
 
         #flattening matrix into a list and removing the blank
-        flatten_board = [val for row in self.n_puzzle for val in row if val != 0]
+        flatten_board = self.n_puzzle.flatten()
+        flatten_board = flatten_board[flatten_board != 0]
         total_size = len(flatten_board)
 
         #finding the amount of inversions
@@ -83,10 +85,8 @@ class puzzleProblem:
         self.frontier = []
         # a list of visited nodes 
         self.seen = {}
-
-
-                
-
+        self.numOfExpandedNodes = 0
+  
     #Aditi & Jon: implement priority queue
     def expandNode(self,node):
         # this function will figure out a list of all the valid next states that we can get

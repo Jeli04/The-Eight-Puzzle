@@ -18,6 +18,7 @@ class a_star:
         heapq.heappush(puzzle.frontier, (0, puzzle.root))
         while len(puzzle.frontier) > 0:
             pair = heapq.heappop(puzzle.frontier)
+            puzzle.numOfExpandedNodes+=1
             
             node = pair[1]  # contains the actual node object 
             curr_node_cost = node.cost    # contrains the numerical cost from start to curr (g value)
@@ -29,7 +30,8 @@ class a_star:
 
             if puzzle.isGoal(node):
                 print("Goal is found!")
-                print(f"Total number of expansions is: {len(puzzle.seen)}")
+                print(node.printPuzzle())
+                print("Number of Expanded Nodes: ", puzzle.numOfExpandedNodes)
                 return puzzle.seen
             
             # add into explored list 
@@ -129,7 +131,7 @@ class a_star:
         correct_val = 1 #meant to indicate what the correct tile at that location in the grid is
         for i in range(child_node.n_puzzle.shape[0]):
             for j in range(child_node.n_puzzle.shape[1]):
-                if(correct_val != child_node.n_puzzle[i, j]):
+                if((correct_val != child_node.n_puzzle[i, j]) and (child_node.n_puzzle[i,j] != 0) and (i*j != dimensionality ** 2)):
                     goal_row = correct_val / dimensionality
                     goal_column = (correct_val % dimensionality) - 1
 
@@ -141,21 +143,6 @@ class a_star:
             
             curr_row += 1
             curr_column = 0
-
-        # for row in child_node.n_puzzle:
-        #     for tile in row:
-        #         if(correct_val != child_node[row][tile]):
-        #             goal_row = correct_val / dimensionality
-        #             goal_column = (correct_val % dimensionality) - 1
-
-        #             euclidean_distance = math.sqrt(((goal_column - curr_column) ** 2) + ((goal_row - curr_row) ** 2))
-        #             cost += euclidean_distance
-                
-        #         curr_column += 1
-        #         correct_val += 1
-
-        #     curr_row += 1
-        #     curr_column = 0
             
         return cost
 
