@@ -18,7 +18,7 @@ class a_star:
         heapq.heappush(puzzle.frontier, (0, puzzle.root))
         while len(puzzle.frontier) > 0:
             pair = heapq.heappop(puzzle.frontier)
-            
+            puzzle.numOfExpandedNodes+=1
             
             node = pair[1]  # contains the actual node object 
             curr_node_cost = node.cost    # contrains the numerical cost from start to curr (g value)
@@ -28,7 +28,8 @@ class a_star:
 
             if puzzle.isGoal(node):
                 print("Goal is found!")
-                print(f"Total number of expansions is: {len(puzzle.seen)}")
+                print(node.printPuzzle())
+                print("Number of Expanded Nodes: ", puzzle.numOfExpandedNodes)
                 return puzzle.seen
             
             # add into explored list 
