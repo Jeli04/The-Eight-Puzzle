@@ -50,8 +50,11 @@ class puzzleProblem:
     def Solvable(self, node) -> bool:
         inversions = 0
 
+        #flattening matrix into a list and removing the blank
         flatten_board = [val for row in node.n_puzzle for val in row if val != 0]
         total_size = len(flatten_board)
+
+        #finding the amount of inversions
         for i in range(total_size):
             for j in range(i + 1, total_size):
                 if flatten_board[i] > flatten_board[j]:
