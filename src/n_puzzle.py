@@ -48,10 +48,10 @@ class Node:
         if(((self.dim) % 2) == 1) and ((inversions % 2) == 0):
             return True
         
-        if((((self.dim) % 2) == 0) and (((self.getInitialStateIndex()[0]) % 2) == 1) and ((inversions % 2) == 0)):
+        if((((self.dim) % 2) == 0) and (((self.getInitialStateIndex()[0]) % 2) == 0) and ((inversions % 2) == 1)):
             return True
         
-        if((((self.dim) % 2) == 0) and (((self.getInitialStateIndex()[0]) % 2) == 0) and ((inversions % 2) == 1)):
+        if((((self.dim) % 2) == 0) and (((self.getInitialStateIndex()[0]) % 2) == 1) and ((inversions % 2) == 0)):
             return True
         
         return False
