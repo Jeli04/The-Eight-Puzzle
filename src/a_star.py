@@ -149,10 +149,12 @@ class a_star:
 
                     euclidean_distance = math.sqrt(((goal_column - curr_column) ** 2) + ((goal_row - curr_row) ** 2))
                     cost += euclidean_distance
-                    curr_column += 1
-
+                
+                curr_column += 1
                 correct_val += 1
-                curr_row += 1
-                curr_column = 0
+
+            curr_row += 1
+            curr_column = 0
+            
         return cost
 
