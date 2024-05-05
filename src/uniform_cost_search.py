@@ -1,7 +1,11 @@
 import math
 import heapq
+import numpy as np
+import sys
 from n_puzzle import Node
 from n_puzzle import puzzleProblem
+
+sys.setrecursionlimit(1000000000)
 
 class uniform_cost_search:
     def execute_ucs(self, game):
@@ -10,15 +14,20 @@ class uniform_cost_search:
         
         while game.frontier:
             pair = heapq.heappop(game.frontier)
+            game.numOfExpandedNodes+=1
             node = pair[1] # we actually want current!
             cur_cost = node.cost
             
             # return current state if goal is found
-            if game.isGoal():
+            
+            if game.isGoal(node):
+                print("I'm the goal:")
+                print(node.printPuzzle())
+                print("Number of Expanded Nodes: ", game.numOfExpandedNodes)
                 return game.seen
        
             # mark current node as visited
-            game.seen.append(node)
+            game.seen[game.toString(node)] = node
             
             # obtain child node from all 4 possible operators
             for action in game.expandNode(node):
@@ -37,40 +46,38 @@ class uniform_cost_search:
                     child = game.operator_go_down(node)
                     print("down")
             
-                # calculate the child node cost (delete later)
-                # child_cost = child.parent.cost + 1 //already in n_puzzle
-                
-                child_cost = child.parent.cost
                 visited = False
                 
-                #get child cost (child.cost) to use below
                
-                
-                # update child node if smaller cost is found
-                for pair in game.frontier:
-                    if (pair[1].n_puzzle == child.n_puzzle).all():
-                        visited = True
-                        
-                        if child_cost < cur_cost:
-                            pair[1].cost = child_cost
-                            pair[1].parent = node
-                
-                if visited == False:
-                    for item in game.seen:
-                        if (item.n_puzzle == child.n_puzzle).all():
+                puzzleString = game.toString(child)
+                if visited == False and puzzleString in game.seen and child.cost < cur_cost:
+                    visited = True
+                    seenNode = game.seen[puzzleString]
+                    seenNode.cost = child.cost
+                    seenNode.parent = node
+                    heapq.heappush(game.frontier, (child.cost, seenNode))
+                    print("Before delete ", len(game.seen))
+                    del game.seen[puzzleString]
+                    print("After delete ", len(game.seen))
+                else:
+                    for pair in game.frontier:
+                        if np.array_equal(pair[1].n_puzzle, child.n_puzzle):
                             visited = True
-                            
-                            if child_cost < cur_cost:
-                                item.cost = child_cost
-                                item.parent = node
-                                heapq.heappush(game.frontier, (child_cost, item))
-                
+                            if child.cost < cur_cost:
+                                pair[1].cost = child.cost
+                                pair[1].parent = node
+                                break
+
                 # add into frontier if never seen yet
                 if visited == False:
-                    child.cost = child_cost
-                    heapq.heappush(game.frontier, (child_cost, item))
-                
-            game.seen.append(node)
-        
+                    # print("push into heap")
+                    # print(puzzle.frontier)
+                    #child.cost = child_cost         
+                    heapq.heappush(game.frontier, (child.cost, child))
+ 
+            game.seen[game.toString(node)] = node
+            
+
         return None
+
     
