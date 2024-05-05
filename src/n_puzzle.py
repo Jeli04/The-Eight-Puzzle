@@ -5,12 +5,17 @@ import copy
 class Node:
     #Constructor for puzzle node
     def __init__(self, dim = 3, n_puzzle = None, parent = None) -> None:
-        # self.n_puzzle = None
         if dim == 3 and n_puzzle is None or dim > 3 and n_puzzle is None:
             self.dim = dim
             self.n_puzzle = np.arange(self.dim * self.dim)
             np.random.shuffle(self.n_puzzle)
+
+            while (self.Solvable() == False):
+                self.n_puzzle = np.arange(self.dim * self.dim)
+                np.random.shuffle(self.n_puzzle)
+
             self.n_puzzle = np.asmatrix(self.n_puzzle.reshape(self.dim, self.dim))
+
         elif n_puzzle is not None and dim >= 3:
             self.dim = dim
             self.n_puzzle = n_puzzle
@@ -23,6 +28,31 @@ class Node:
         self.heuristic = 0
         self.cost = 0 
         self.totalCost = self.heuristic + self.cost  
+
+    def Solvable(self) -> bool:
+        inversions = 0
+
+        #flattening matrix into a list and removing the blank
+        flatten_board = [val for row in self.n_puzzle for val in row if val != 0]
+        total_size = len(flatten_board)
+
+        #finding the amount of inversions
+        for i in range(total_size):
+            for j in range(i + 1, total_size):
+                if flatten_board[i] > flatten_board[j]:
+                    inversions += 1
+
+        if(((self.dim) % 2) == 1) and ((inversions % 2) == 0):
+            return True
+        
+        if((((self.dim) % 2) == 0) and (((self.getInitialStateIndex()[0]) % 2) == 1) and ((inversions % 2) == 1)):
+            return True
+        
+        if((((self.dim) % 2) == 0) and (((self.getInitialStateIndex()[0]) % 2) == 0) and ((inversions % 2) == 0)):
+            return True
+        
+        return False
+
 
     def __lt__(self, other):
         # Compare based on total cost as the primary criterion
@@ -39,7 +69,6 @@ class Node:
     ##Gets the index of the "blank" (for us 0) puzzle piece
     def getInitialStateIndex(self):
         return [np.where(self.n_puzzle == 0)[0][0], np.where(self.n_puzzle == 0)[1][0]]
-        #I know this is bad, you don't have to tell me
 
 
 
@@ -55,7 +84,7 @@ class puzzleProblem:
         # a list of visited nodes 
         self.seen = {}
         self.numOfExpandedNodes = 0
-   
+  
     #Aditi & Jon: implement priority queue
     def expandNode(self,node):
         # this function will figure out a list of all the valid next states that we can get
@@ -106,14 +135,13 @@ class puzzleProblem:
 
         currIndex_col = new_node.getInitialStateIndex()[0]
         currIndex_row = new_node.getInitialStateIndex()[1]
-        print(f'Before left operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row - 1] = new_node.n_puzzle[currIndex_col, currIndex_row - 1], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
 
         new_node.cost += 1
 
-        print(f'After left operation:\n{new_node.n_puzzle}')
+        # print(f'After left operation:\n{new_node.n_puzzle}')
 
         # print("currNode:", currNode)
         # print("deep copy:", new_node)
@@ -127,14 +155,13 @@ class puzzleProblem:
 
         currIndex_col = new_node.getInitialStateIndex()[0]
         currIndex_row = new_node.getInitialStateIndex()[1]
-        print(f'Before right operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row + 1] = new_node.n_puzzle[currIndex_col, currIndex_row + 1], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
 
         new_node.cost += 1
 
-        print(f'After right operation:\n{new_node.n_puzzle}')
+        # print(f'After right operation:\n{new_node.n_puzzle}')
 
         # print("currNode:", currNode)
         # print("deep copy:", new_node)
@@ -146,14 +173,13 @@ class puzzleProblem:
 
         currIndex_col = currNode.getInitialStateIndex()[0]
         currIndex_row = currNode.getInitialStateIndex()[1]
-        print(f'Before up operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col - 1, currIndex_row] = new_node.n_puzzle[currIndex_col - 1, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
 
         new_node.cost += 1
 
-        print(f'After up operation:\n{new_node.n_puzzle}')
+        # print(f'After up operation:\n{new_node.n_puzzle}')
 
         # print("currNode:", currNode)
         # print("deep copy:", new_node)
@@ -165,7 +191,6 @@ class puzzleProblem:
 
         currIndex_col = new_node.getInitialStateIndex()[0]
         currIndex_row = new_node.getInitialStateIndex()[1]
-        print(f'Before down operation:\n{new_node.n_puzzle}\n')
 
         new_node.n_puzzle[currIndex_col, currIndex_row], new_node.n_puzzle[currIndex_col + 1, currIndex_row] = new_node.n_puzzle[currIndex_col + 1, currIndex_row], new_node.n_puzzle[currIndex_col, currIndex_row]
         new_node.parent = access_node
@@ -174,7 +199,7 @@ class puzzleProblem:
 
         # print("currNode:", currNode)
         # print("deep copy:", new_node)
-        print(f'After down operation:\n{new_node.n_puzzle}')
+        # print(f'After down operation:\n{new_node.n_puzzle}')
 
         return new_node
     
