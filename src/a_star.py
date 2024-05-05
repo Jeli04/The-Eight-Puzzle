@@ -28,7 +28,7 @@ class a_star:
             if puzzle.isGoal(node):
                 print("Goal is found!")
                 print(f"Total number of expansions is: {len(puzzle.seen)}")
-                exit(0)
+                return puzzle.seen
             
             # add into explored list 
             puzzle.seen[puzzle.toString(node)] = node
@@ -76,22 +76,6 @@ class a_star:
                                 pair[1].parent = node
                                 break
 
-                # update child node if smaller cost     
-                # if seen == False:
-                #     for n in puzzle.seen:
-                #         # if len(puzzle.frontier) > 3: return
-                #         print(np.array_equal(n.n_puzzle, child.n_puzzle))
-                #         print(n.n_puzzle)
-                #         print(child.n_puzzle)
-                #         if np.array_equal(n.n_puzzle, child.n_puzzle):
-                #             seen = True
-                #             if child_cost < curr_node_cost:
-                #                 print("REACHED")
-                #                 n.cost = child_cost
-                #                 n.parent = node
-                #                 heapq.heappush(puzzle.frontier, ((child_cost + self.heuristic_cost(heuristic_type, child)), n))
-                #                 break
-
                 # add into frontier if never seen yet
                 if seen == False:
                     # print("push into heap")
@@ -134,27 +118,42 @@ class a_star:
         Parameters: A possible child node
         Return: Heuristic cost of child node
     """
-    def _euclidean_distance_heuristic(child_node):
+    def _euclidean_distance_heuristic(self, child_node):
 
         cost = 0
         curr_row = 0
         curr_column = 0
-        dimensionality = len(child_node.n_puzzle[0])
+        dimensionality = child_node.n_puzzle.shape[1]
         correct_val = 1 #meant to indicate what the correct tile at that location in the grid is
-        for row in child_node.n_puzzle:
-            for tile in row:
-                if(correct_val != child_node[row][tile]):
+        for i in range(child_node.n_puzzle.shape[0]):
+            for j in range(child_node.n_puzzle.shape[1]):
+                if(correct_val != child_node.n_puzzle[i, j]):
                     goal_row = correct_val / dimensionality
                     goal_column = (correct_val % dimensionality) - 1
 
                     euclidean_distance = math.sqrt(((goal_column - curr_column) ** 2) + ((goal_row - curr_row) ** 2))
                     cost += euclidean_distance
-                
+
                 curr_column += 1
                 correct_val += 1
-
+            
             curr_row += 1
             curr_column = 0
+
+        # for row in child_node.n_puzzle:
+        #     for tile in row:
+        #         if(correct_val != child_node[row][tile]):
+        #             goal_row = correct_val / dimensionality
+        #             goal_column = (correct_val % dimensionality) - 1
+
+        #             euclidean_distance = math.sqrt(((goal_column - curr_column) ** 2) + ((goal_row - curr_row) ** 2))
+        #             cost += euclidean_distance
+                
+        #         curr_column += 1
+        #         correct_val += 1
+
+        #     curr_row += 1
+        #     curr_column = 0
             
         return cost
 
