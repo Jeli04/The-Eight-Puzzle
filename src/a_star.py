@@ -1,6 +1,9 @@
 import math
 import heapq
 import numpy as np
+import sys
+
+sys.setrecursionlimit(1000000000)
 
 class a_star:
     def __init__(self) -> None:
@@ -14,8 +17,7 @@ class a_star:
     def call_a_star(self, puzzle, heuristic_type):
         heapq.heappush(puzzle.frontier, (0, puzzle.root))
         while len(puzzle.frontier) > 0:
-            pair = puzzle.frontier[0]
-            heapq.heappop(puzzle.frontier)
+            pair = heapq.heappop(puzzle.frontier)
             
             node = pair[1]  # contains the actual node object 
             curr_node_cost = node.cost    # contrains the numerical cost from start to curr (g value)
@@ -24,11 +26,14 @@ class a_star:
             node.totalCost = node.cost + node.heuristic
 
             # check if node is a goal state 
-            if puzzle.isGoal():
+            print("check before solution: ", node.n_puzzle)
+            print("goal state: ", puzzle.goalState)
+            print(puzzle.isGoal(node))
+            if puzzle.isGoal(node):
                 return puzzle.seen
             
             # add into explored list 
-            puzzle.seen.append(node)
+            puzzle.seen[puzzle.toString(node)] = node
 
             # check each child node created by possible actions
             for action in puzzle.expandNode(node):
@@ -47,42 +52,55 @@ class a_star:
 
                 # calculate the child node g value
                 child_cost = child.parent.cost
-                
-
+                            
                 seen = False
-                for pair in puzzle.frontier:
-                    if np.array_equal(pair[1].n_puzzle, child.n_puzzle):
-                        seen = True
-                        if child_cost < curr_node_cost:
-                            pair[1].cost = child_cost
-                            pair[1].parent = node
-                            break
 
                 # update child node if smaller cost     
-                if seen == False:
-                    for n in puzzle.seen:
-                        # if len(puzzle.frontier) > 3: return
-                        print(np.array_equal(n.n_puzzle, child.n_puzzle))
-                        print(n.n_puzzle)
-                        print(child.n_puzzle)
-                        if np.array_equal(n.n_puzzle, child.n_puzzle):
+                puzzleString = puzzle.toString(child)
+                if seen == False and puzzleString in puzzle.seen and child_cost < curr_node_cost:
+                    seen = True
+                    seenNode = puzzle.seen[puzzleString]
+                    seenNode.cost = child_cost
+                    seenNode.parent = node
+                    heapq.heappush(puzzle.frontier, ((child_cost + self.heuristic_cost(heuristic_type, child)), seenNode))
+                    print("Before delete ", len(puzzle.seen))
+                    del puzzle.seen[puzzleString]
+                    print("After delete ", len(puzzle.seen))
+                else:
+                    for pair in puzzle.frontier:
+                        # if len(puzzle.frontier) > 5: return
+                        if np.array_equal(pair[1].n_puzzle, child.n_puzzle):
                             seen = True
                             if child_cost < curr_node_cost:
-                                print("REACHED")
-                                n.cost = child_cost
-                                n.parent = node
-                                heapq.heappush(puzzle.frontier, ((child_cost + self.heuristic_cost(heuristic_type, child)), n))
+                                pair[1].cost = child_cost
+                                pair[1].parent = node
                                 break
+
+                # update child node if smaller cost     
+                # if seen == False:
+                #     for n in puzzle.seen:
+                #         # if len(puzzle.frontier) > 3: return
+                #         print(np.array_equal(n.n_puzzle, child.n_puzzle))
+                #         print(n.n_puzzle)
+                #         print(child.n_puzzle)
+                #         if np.array_equal(n.n_puzzle, child.n_puzzle):
+                #             seen = True
+                #             if child_cost < curr_node_cost:
+                #                 print("REACHED")
+                #                 n.cost = child_cost
+                #                 n.parent = node
+                #                 heapq.heappush(puzzle.frontier, ((child_cost + self.heuristic_cost(heuristic_type, child)), n))
+                #                 break
 
                 # add into frontier if never seen yet
                 if seen == False:
-                    print("push into heap")
-                    print(puzzle.frontier)
+                    # print("push into heap")
+                    # print(puzzle.frontier)
                     child.cost = child_cost
                     child.heuristic = self.heuristic_cost(heuristic_type, child)             
                     heapq.heappush(puzzle.frontier, (child.cost + child.heuristic, child))
 
-            puzzle.seen.append(node)
+            puzzle.seen[puzzle.toString(node)] = node
 
         return None
 

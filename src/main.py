@@ -32,7 +32,7 @@ def main():
     problem = puzzleProblem(initial)
     print(initial.n_puzzle)
     print(problem.goalState)
-    print(problem.isGoal())
+    print(problem.isGoal(problem.root))
         
     print("\n1 for Uniform Cost Search")
     print("2 for A* with the Misplaced Tile heuristic.")

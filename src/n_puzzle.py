@@ -53,7 +53,7 @@ class puzzleProblem:
         self.goalState = self.createGoalState(root.dim)
         self.frontier = []
         # a list of visited nodes 
-        self.seen = []
+        self.seen = {}
    
     #Aditi & Jon: implement priority queue
     def expandNode(self,node):
@@ -62,7 +62,7 @@ class puzzleProblem:
         listOfActions = []
         index = node.getInitialStateIndex()
 
-        print("index: ", index)
+        # print("index: ", index)
         #print(index[0]) # is row number
         #print(index[1]) # is col 
         if index[1]!=(dimension-1):
@@ -82,8 +82,12 @@ class puzzleProblem:
         #print(listOfActions)
         return listOfActions
 
-    def isGoal(self) -> bool:
-        return np.array_equal(self.root.n_puzzle, self.goalState)
+    # returns the numbers in the puzzle as a string
+    def toString(self, node):
+        return ''.join(str(n) for row in node.n_puzzle.tolist() for n in row)
+        
+    def isGoal(self, node) -> bool:
+        return np.array_equal(node.n_puzzle, self.goalState)
 
     def createGoalState(self, dim) -> np.matrix:
         matrix = np.arange(dim * dim).reshape(dim, dim)
@@ -110,8 +114,8 @@ class puzzleProblem:
 
         print(f'After left operation:\n{new_node.n_puzzle}')
 
-        print("currNode:", currNode)
-        print("deep copy:", new_node)
+        # print("currNode:", currNode)
+        # print("deep copy:", new_node)
         return new_node
 
             
@@ -131,8 +135,8 @@ class puzzleProblem:
 
         print(f'After right operation:\n{new_node.n_puzzle}')
 
-        print("currNode:", currNode)
-        print("deep copy:", new_node)
+        # print("currNode:", currNode)
+        # print("deep copy:", new_node)
         return new_node
 
     def operator_go_up(self, currNode):
@@ -150,8 +154,8 @@ class puzzleProblem:
 
         print(f'After up operation:\n{new_node.n_puzzle}')
 
-        print("currNode:", currNode)
-        print("deep copy:", new_node)
+        # print("currNode:", currNode)
+        # print("deep copy:", new_node)
         return new_node
 
     def operator_go_down(self, currNode):
@@ -167,18 +171,19 @@ class puzzleProblem:
 
         new_node.cost += 1
 
-        print("currNode:", currNode)
-        print("deep copy:", new_node)
+        # print("currNode:", currNode)
+        # print("deep copy:", new_node)
         print(f'After down operation:\n{new_node.n_puzzle}')
 
         return new_node
     
 
+new_node = Node(n_puzzle=np.asmatrix(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]])))
 
-puzzle = puzzleProblem(Node(4))
+puzzle = puzzleProblem(root=new_node)
 
-print(Node(4))
+print(new_node.n_puzzle)
 
 puzzle.printGoalState()
 
-print(puzzle.isGoal())
+print(puzzle.isGoal(new_node))
