@@ -27,21 +27,17 @@ def main():
         initial = Node(dim=int(dim), n_puzzle=matrix)
         # initial.printPuzzle()
     
-    # print("\nThe location of the blank spot is: ")
     problem = puzzleProblem(initial)
-    print(initial.n_puzzle)
-    print(problem.goalState)
-    print(problem.isGoal(problem.root))
-        
+    
+    print("\n")
+    print("Choose your searching algorithm: ")
     print("\n1 for Uniform Cost Search")
     print("2 for A* with the Misplaced Tile heuristic.")
     print("3 for A* with the Euclidean distance heuristic.")
     
     algo = int(input("Enter your choice of algorithm: "))
+    print("\n")
     
-    # print what the first state looks like
-    print("Expanding state")
-    initial.printPuzzle()
     problem.expandNode(initial)
     
     if (algo == 1):
@@ -50,6 +46,7 @@ def main():
         #print(object.execute_ucs(problem))
     elif (algo == 2):
         object = a_star()
+        print(f"Starting State:\n {initial.n_puzzle}")
         print(object.call_a_star(problem, "misplaced"))
     elif (algo == 3):
         object = a_star()

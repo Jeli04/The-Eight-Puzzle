@@ -25,12 +25,11 @@ class a_star:
             # calculate the g(n) + h(n) cost
             node.totalCost = node.cost + node.heuristic
 
-            # check if node is a goal state 
-            print("check before solution: ", node.n_puzzle)
-            print("goal state: ", puzzle.goalState)
-            print(puzzle.isGoal(node))
+
             if puzzle.isGoal(node):
-                return puzzle.seen
+                print("Goal is found!")
+                print(f"Total number of expansions is: {len(puzzle.seen)}")
+                exit(0)
             
             # add into explored list 
             puzzle.seen[puzzle.toString(node)] = node
