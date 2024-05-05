@@ -11,6 +11,7 @@ class Node:
             np.random.shuffle(self.n_puzzle)
 
             while (self.Solvable() == False):
+                print("This is invalid puzzle, generating a valid one.")
                 self.n_puzzle = np.arange(self.dim * self.dim)
                 np.random.shuffle(self.n_puzzle)
 
@@ -86,6 +87,7 @@ class puzzleProblem:
         # a list of visited nodes 
         self.seen = {}
         self.numOfExpandedNodes = 0
+        self.maxQueueSize = 0
   
     #Aditi & Jon: implement priority queue
     def expandNode(self,node):

@@ -18,33 +18,33 @@ class uniform_cost_search:
             node = pair[1] # we actually want current!
             cur_cost = node.cost
             
+            # mark current node as visited
+            game.seen[game.toString(node)] = node
+
             # return current state if goal is found
-            
             if game.isGoal(node):
                 print("I'm the goal:")
                 print(node.printPuzzle())
                 print("Number of Expanded Nodes: ", game.numOfExpandedNodes)
                 return game.seen
        
-            # mark current node as visited
-            game.seen[game.toString(node)] = node
-            
+
             # obtain child node from all 4 possible operators
             for action in game.expandNode(node):
                 child = None
                 
                 if action == "right":
-                    print("right")
+                    # print("right")
                     child = game.operator_go_right(node)
                 elif action == "left":
                     child = game.operator_go_left(node)
-                    print("left")
+                    # print("left")
                 elif action == "up":
                     child = game.operator_go_up(node)
-                    print("up")
+                    # print("up")
                 elif action == "down":
                     child = game.operator_go_down(node)
-                    print("down")
+                    # print("down")
             
                 visited = False
                 
@@ -56,9 +56,8 @@ class uniform_cost_search:
                     seenNode.cost = child.cost
                     seenNode.parent = node
                     heapq.heappush(game.frontier, (child.cost, seenNode))
-                    print("Before delete ", len(game.seen))
                     del game.seen[puzzleString]
-                    print("After delete ", len(game.seen))
+                    game.maxQueueSize = max(game.maxQueueSize, len(game.frontier))
                 else:
                     for pair in game.frontier:
                         if np.array_equal(pair[1].n_puzzle, child.n_puzzle):
@@ -74,7 +73,8 @@ class uniform_cost_search:
                     # print(puzzle.frontier)
                     #child.cost = child_cost         
                     heapq.heappush(game.frontier, (child.cost, child))
- 
+                    game.maxQueueSize = max(game.maxQueueSize, len(game.frontier))
+
             game.seen[game.toString(node)] = node
             
 

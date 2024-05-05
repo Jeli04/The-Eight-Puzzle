@@ -18,7 +18,7 @@ class a_star:
         heapq.heappush(puzzle.frontier, (0, puzzle.root))
         while len(puzzle.frontier) > 0:
             pair = heapq.heappop(puzzle.frontier)
-            
+            puzzle.numOfExpandedNodes+=1
             
             node = pair[1]  # contains the actual node object 
             curr_node_cost = node.cost    # contrains the numerical cost from start to curr (g value)
@@ -26,14 +26,19 @@ class a_star:
             # calculate the g(n) + h(n) cost
             node.totalCost = node.cost + node.heuristic
 
-            if puzzle.isGoal(node):
-                print("Goal is found!")
-                print(f"Total number of expansions is: {len(puzzle.seen)}")
-                return puzzle.seen
-            
+            # print(puzzle.frontier)
+
             # add into explored list 
             puzzle.seen[puzzle.toString(node)] = node
+
+            if puzzle.isGoal(node):
+                print("Goal is found!")
+                print(node.printPuzzle())
+                print("Number of Expanded Nodes: ", puzzle.numOfExpandedNodes)
+                return puzzle.seen
+            
             print(len(puzzle.seen))
+
             # check each child node created by possible actions
             for action in puzzle.expandNode(node):
                 # print(len(puzzle.frontier))
@@ -57,7 +62,7 @@ class a_star:
                 # update child node if smaller cost     
                 puzzleString = puzzle.toString(child)
                 if seen == False and puzzleString in puzzle.seen and child_cost < curr_node_cost:
-                    # if len(puzzle.frontier) > 5: return
+                    if len(puzzle.frontier) > 2: return
                     # print(puzzleString)
                     seen = True
                     seenNode = puzzle.seen[puzzleString]
@@ -67,6 +72,7 @@ class a_star:
                     # print("Before delete ", len(puzzle.seen))
                     del puzzle.seen[puzzleString]
                     # print("After delete ", len(puzzle.seen))
+                    puzzle.maxQueueSize = max(puzzle.maxQueueSize, len(puzzle.frontier))
                 else:
                     for pair in puzzle.frontier:
                         # if len(puzzle.frontier) > 5: return
@@ -79,11 +85,10 @@ class a_star:
 
                 # add into frontier if never seen yet
                 if seen == False:
-                    # print("push into heap")
-                    # print(puzzle.frontier)
                     child.cost = child_cost
-                    child.heuristic = self.heuristic_cost(heuristic_type, child)             
+                    child.heuristic = self.heuristic_cost(heuristic_type, child)    
                     heapq.heappush(puzzle.frontier, (child.cost + child.heuristic, child))
+                    puzzle.maxQueueSize = max(puzzle.maxQueueSize, len(puzzle.frontier))
 
             puzzle.seen[puzzle.toString(node)] = node
 
@@ -108,7 +113,7 @@ class a_star:
 
         for i in range(child_node.n_puzzle.shape[0]):
             for j in range(child_node.n_puzzle.shape[1]):
-                if child_node.n_puzzle[i,j] != tracker:
+                if child_node.n_puzzle[i,j] != tracker and child_node.n_puzzle[i,j] != 0:
                     cost += 1
                 tracker+=1
 
@@ -140,21 +145,6 @@ class a_star:
             
             curr_row += 1
             curr_column = 0
-
-        # for row in child_node.n_puzzle:
-        #     for tile in row:
-        #         if(correct_val != child_node[row][tile]):
-        #             goal_row = correct_val / dimensionality
-        #             goal_column = (correct_val % dimensionality) - 1
-
-        #             euclidean_distance = math.sqrt(((goal_column - curr_column) ** 2) + ((goal_row - curr_row) ** 2))
-        #             cost += euclidean_distance
-                
-        #         curr_column += 1
-        #         correct_val += 1
-
-        #     curr_row += 1
-        #     curr_column = 0
             
         return cost
 
