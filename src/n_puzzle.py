@@ -9,7 +9,13 @@ class Node:
             self.dim = dim
             self.n_puzzle = np.arange(self.dim * self.dim)
             np.random.shuffle(self.n_puzzle)
+
+            while (self.Solvable() == False):
+                self.n_puzzle = np.arange(self.dim * self.dim)
+                np.random.shuffle(self.n_puzzle)
+
             self.n_puzzle = np.asmatrix(self.n_puzzle.reshape(self.dim, self.dim))
+
         elif n_puzzle is not None and dim >= 3:
             self.dim = dim
             self.n_puzzle = n_puzzle
@@ -22,6 +28,31 @@ class Node:
         self.heuristic = 0
         self.cost = 0 
         self.totalCost = self.heuristic + self.cost  
+
+    def Solvable(self) -> bool:
+        inversions = 0
+
+        #flattening matrix into a list and removing the blank
+        flatten_board = [val for row in self.n_puzzle for val in row if val != 0]
+        total_size = len(flatten_board)
+
+        #finding the amount of inversions
+        for i in range(total_size):
+            for j in range(i + 1, total_size):
+                if flatten_board[i] > flatten_board[j]:
+                    inversions += 1
+
+        if(((self.dim) % 2) == 1) and ((inversions % 2) == 0):
+            return True
+        
+        if((((self.dim) % 2) == 0) and (((self.getInitialStateIndex()[0]) % 2) == 1) and ((inversions % 2) == 1)):
+            return True
+        
+        if((((self.dim) % 2) == 0) and (((self.getInitialStateIndex()[0]) % 2) == 0) and ((inversions % 2) == 0)):
+            return True
+        
+        return False
+
 
     def __lt__(self, other):
         # Compare based on total cost as the primary criterion
@@ -52,30 +83,6 @@ class puzzleProblem:
         self.frontier = []
         # a list of visited nodes 
         self.seen = {}
-   
-    def Solvable(self, node) -> bool:
-        inversions = 0
-
-        #flattening matrix into a list and removing the blank
-        flatten_board = [val for row in node.n_puzzle for val in row if val != 0]
-        total_size = len(flatten_board)
-
-        #finding the amount of inversions
-        for i in range(total_size):
-            for j in range(i + 1, total_size):
-                if flatten_board[i] > flatten_board[j]:
-                    inversions += 1
-
-        if(((node.dim) % 2) == 1) and ((inversions % 2) == 0):
-            return True
-        
-        if((((node.dim) % 2) == 0) and (((node.getInitialStateIndex()[0]) % 2) == 1) and ((inversions % 2) == 1)):
-            return True
-        
-        if((((node.dim) % 2) == 0) and (((node.getInitialStateIndex()[0]) % 2) == 0) and ((inversions % 2) == 0)):
-            return True
-        
-        return False
 
 
                 
