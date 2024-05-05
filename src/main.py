@@ -10,7 +10,6 @@ def main():
     
     if(puzzleChoice==1):
         initial = Node()
-        # initial.printPuzzle()
     if(puzzleChoice == 2):
         dim = int(input("Enter the dimension of your n x n puzzle. Ex. (3 x 3) puzzle, enter 3\n"))
         print("Enter your puzzle, use a zero to represent the blank")
