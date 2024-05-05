@@ -19,6 +19,7 @@ class a_star:
         while len(puzzle.frontier) > 0:
             pair = heapq.heappop(puzzle.frontier)
             
+            
             node = pair[1]  # contains the actual node object 
             curr_node_cost = node.cost    # contrains the numerical cost from start to curr (g value)
 

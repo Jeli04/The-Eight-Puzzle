@@ -54,6 +54,7 @@ class puzzleProblem:
         self.frontier = []
         # a list of visited nodes 
         self.seen = {}
+        self.numOfExpandedNodes = 0
    
     #Aditi & Jon: implement priority queue
     def expandNode(self,node):

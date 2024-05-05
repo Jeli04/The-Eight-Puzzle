@@ -48,13 +48,13 @@ def main():
     if (algo == 1):
         object = uniform_cost_search()
         object.execute_ucs(problem)
-        #print(object.execute_ucs(problem))
     elif (algo == 2):
         object = a_star()
         print(object.call_a_star(problem, "misplaced"))
     elif (algo == 3):
         object = a_star()
         print(object.call_a_star(problem, "euclidean"))
+    
 
 if __name__ == '__main__':
     main()
