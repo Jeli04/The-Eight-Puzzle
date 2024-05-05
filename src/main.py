@@ -47,10 +47,15 @@ def main():
     elif (algo == 2):
         object = a_star()
         print(f"Starting State:\n {initial.n_puzzle}")
-        print(object.call_a_star(problem, "misplaced"))
+        output = object.call_a_star(problem, "misplaced")
+        print(output)
+        # for v in output:
+        #     print("output ", output[v].n_puzzle)
     elif (algo == 3):
         object = a_star()
-        print(object.call_a_star(problem, "euclidean"))
+        output = object.call_a_star(problem, "euclidean")
+        print(output)
+
 
 if __name__ == '__main__':
     main()
