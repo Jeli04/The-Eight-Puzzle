@@ -28,14 +28,14 @@ class a_star:
 
             # print(puzzle.frontier)
 
+            # add into explored list 
+            puzzle.seen[puzzle.toString(node)] = node
+
             if puzzle.isGoal(node):
                 print("Goal is found!")
                 print(node.printPuzzle())
                 print("Number of Expanded Nodes: ", puzzle.numOfExpandedNodes)
                 return puzzle.seen
-            
-            # add into explored list 
-            puzzle.seen[puzzle.toString(node)] = node
             
             print(len(puzzle.seen))
 
@@ -72,6 +72,7 @@ class a_star:
                     # print("Before delete ", len(puzzle.seen))
                     del puzzle.seen[puzzleString]
                     # print("After delete ", len(puzzle.seen))
+                    puzzle.maxQueueSize = max(puzzle.maxQueueSize, len(puzzle.frontier))
                 else:
                     for pair in puzzle.frontier:
                         # if len(puzzle.frontier) > 5: return
@@ -87,6 +88,7 @@ class a_star:
                     child.cost = child_cost
                     child.heuristic = self.heuristic_cost(heuristic_type, child)    
                     heapq.heappush(puzzle.frontier, (child.cost + child.heuristic, child))
+                    puzzle.maxQueueSize = max(puzzle.maxQueueSize, len(puzzle.frontier))
 
             puzzle.seen[puzzle.toString(node)] = node
 

@@ -4,6 +4,18 @@ from n_puzzle import puzzleProblem
 from a_star import a_star
 from uniform_cost_search import uniform_cost_search
 
+def calc_depth(puzzle, seen):
+    if seen==None: return 0
+    depth = 0
+    curr_state = seen["123456780"] # goal
+    while curr_state != puzzle.root:
+        depth+=1
+        # print(curr_state.n_puzzle)
+        curr_state = curr_state.parent
+
+    return depth
+    
+
 def main():
     print("Welcome to N-Puzzle Solver")
     puzzleChoice = int(input("Type “1” to use a default puzzle, or “2” to enter your own puzzle.\n"))
@@ -42,19 +54,18 @@ def main():
     
     if (algo == 1):
         object = uniform_cost_search()
-        object.execute_ucs(problem)
+        output = object.execute_ucs(problem)
     elif (algo == 2):
         object = a_star()
         print(f"Starting State:\n {initial.n_puzzle}")
         output = object.call_a_star(problem, "misplaced")
-        print(output)
-        # for v in output:
-        #     print("output ", output[v].n_puzzle)
     elif (algo == 3):
         object = a_star()
         output = object.call_a_star(problem, "euclidean")
-        print(output)
-
+    
+    print("Nodes expanded: ", problem.numOfExpandedNodes)
+    print("Max queue size: ", problem.maxQueueSize)
+    print("Depth: ", calc_depth(problem, output))
 
 if __name__ == '__main__':
     main()

@@ -86,6 +86,7 @@ class puzzleProblem:
         # a list of visited nodes 
         self.seen = {}
         self.numOfExpandedNodes = 0
+        self.maxQueueSize = 0
   
     #Aditi & Jon: implement priority queue
     def expandNode(self,node):
