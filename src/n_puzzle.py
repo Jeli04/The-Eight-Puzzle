@@ -83,10 +83,8 @@ class puzzleProblem:
         self.frontier = []
         # a list of visited nodes 
         self.seen = {}
-
-
-                
-
+        self.numOfExpandedNodes = 0
+  
     #Aditi & Jon: implement priority queue
     def expandNode(self,node):
         # this function will figure out a list of all the valid next states that we can get
