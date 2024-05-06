@@ -1,4 +1,3 @@
-import math
 import heapq
 import numpy as np
 import sys
@@ -10,14 +9,16 @@ sys.setrecursionlimit(1000000000)
 class uniform_cost_search:
     def execute_ucs(self, game):
         
+        # add root to frontier
         heapq.heappush(game.frontier, (0, game.root))
         
+        # iterate until the frontier is empty
         while game.frontier:
+            # pop the cheapest cost node from frontier
             pair = heapq.heappop(game.frontier)
             game.numOfExpandedNodes+=1
             print("Number of Expanded Nodes: ", game.numOfExpandedNodes)
-            node = pair[1] # we actually want current!
-            cur_cost = node.cost
+            node = pair[1] # pair[1] is the game puzzle
             
             # mark current node as visited
             game.seen[game.toString(node)] = node
@@ -30,7 +31,7 @@ class uniform_cost_search:
                 return game.seen
        
 
-            # obtain child node from all 4 possible operators
+            # obtain child node from all possible operators, and expanding tree
             for action in game.expandNode(node):
                 child = None
                 
@@ -46,38 +47,11 @@ class uniform_cost_search:
                 elif action == "down":
                     child = game.operator_go_down(node)
                     print("down")
-            
-                child_cost = child.parent.cost + 1
-                visited = False
                 
-    
+                # get puzzleString to store hash in seen
                 puzzleString = game.toString(child)
-                # if visited == False and puzzleString in game.seen and child_cost < cur_cost:
-                #     if len(game.frontier) > 2: return
-                #     visited = True
-                #     seenNode = game.seen[puzzleString]
-                #     seenNode.cost = child_cost
-                #     seenNode.parent = node
-                #     heapq.heappush(game.frontier, (child_cost, seenNode))
-                #     del game.seen[puzzleString]
-                #     game.maxQueueSize = max(game.maxQueueSize, len(game.frontier))
-                # else:
-                #     for pair in game.frontier:
-                #         if np.array_equal(pair[1].n_puzzle, child.n_puzzle):
-                #             visited = True
-                #             if child_cost < cur_cost:
-                #                 pair[1].cost = child_cost
-                #                 pair[1].parent = node
-                #                 break
-
-                # # add into frontier if never seen yet
-                # if visited == False:
-                #     # print("push into heap")
-                #     # print(puzzle.frontier)
-                #     child.cost = child_cost         
-                #     heapq.heappush(game.frontier, (child_cost, child))
-                #     game.maxQueueSize = max(game.maxQueueSize, len(game.frontier))
-                
+               
+               # only add child to frontier if not in seen or child cost is cheaper
                 if puzzleString not in game.seen or child.cost < game.seen[puzzleString].cost:
                     heapq.heappush(game.frontier, (child.cost, child))
                     game.seen[puzzleString] = child
@@ -86,5 +60,3 @@ class uniform_cost_search:
             game.seen[game.toString(node)] = node
 
         return None
-
-    

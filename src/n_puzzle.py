@@ -95,9 +95,6 @@ class puzzleProblem:
         listOfActions = []
         index = node.getInitialStateIndex()
 
-        # print("index: ", index)
-        #print(index[0]) # is row number
-        #print(index[1]) # is col 
         if index[1]!=(dimension-1):
             #if not right most column, you can go right
             listOfActions.append("right")
@@ -111,8 +108,6 @@ class puzzleProblem:
             #if not bottommost row, you can go down
             listOfActions.append("down")
 
-        # print(index)
-        #print(listOfActions)
         return listOfActions
 
     # returns the numbers in the puzzle as a string
@@ -206,14 +201,3 @@ class puzzleProblem:
         # print(f'After down operation:\n{new_node.n_puzzle}')
 
         return new_node
-    
-
-# new_node = Node(n_puzzle=np.asmatrix(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]])))
-
-# puzzle = puzzleProblem(root=new_node)
-
-# print(new_node.n_puzzle)
-
-# puzzle.printGoalState()
-
-# print(puzzle.isGoal(new_node))
