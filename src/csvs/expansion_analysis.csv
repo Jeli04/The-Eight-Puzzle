@@ -1,0 +1,6 @@
+,Test Case,A* Misplaced Tile,A* Euclidean Distance,Uniform Cost
+0,Trivial,1,1,1
+1,Very Easy,2,2,2
+2,Easy,3,3,6
+3,Doable,4,5,16
+4,Oh Boy,6153,11518,91051
