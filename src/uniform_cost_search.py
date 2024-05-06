@@ -48,7 +48,7 @@ class uniform_cost_search:
             
                 visited = False
                 
-               
+    
                 puzzleString = game.toString(child)
                 if visited == False and puzzleString in game.seen and child.cost < cur_cost:
                     visited = True

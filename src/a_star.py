@@ -37,7 +37,7 @@ class a_star:
                 print("Number of Expanded Nodes: ", puzzle.numOfExpandedNodes)
                 return puzzle.seen
             
-            print(len(puzzle.seen))
+            print(puzzle.numOfExpandedNodes)
 
             # check each child node created by possible actions
             for action in puzzle.expandNode(node):
