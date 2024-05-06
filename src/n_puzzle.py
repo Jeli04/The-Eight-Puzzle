@@ -10,11 +10,13 @@ class Node:
             self.n_puzzle = np.arange(self.dim * self.dim)
             np.random.shuffle(self.n_puzzle)
 
+            #Checks to see if the given puzzle is solvable
             while (self.Solvable() == False):
                 print("This is invalid puzzle, generating a valid one.")
                 self.n_puzzle = np.arange(self.dim * self.dim)
                 np.random.shuffle(self.n_puzzle)
 
+            #Sets array to matrix type
             self.n_puzzle = np.asmatrix(self.n_puzzle.reshape(self.dim, self.dim))
 
         elif n_puzzle is not None and dim >= 3:
@@ -57,12 +59,12 @@ class Node:
         return False
     
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         # Compare based on total cost as the primary criterion
         return (self.cost + self.heuristic) < (other.cost + other.heuristic)
 
     # Optionally, implement other comparison methods
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         return (self.cost + self.heuristic) == (other.cost + other.heuristic) 
             
     ##Prints the puzzle at the current state
@@ -70,7 +72,7 @@ class Node:
         print(self.n_puzzle)
 
     ##Gets the index of the "blank" (for us 0) puzzle piece
-    def getInitialStateIndex(self):
+    def getInitialStateIndex(self) -> list[int]:
         return [np.where(self.n_puzzle == 0)[0][0], np.where(self.n_puzzle == 0)[1][0]]
 
 
@@ -89,7 +91,9 @@ class puzzleProblem:
         self.numOfExpandedNodes = 0
         self.maxQueueSize = 0
   
+    #Creates frontier of nodes (i.e. computes node expansions)
     def expandNode(self,node):
+
         # this function will figure out a list of all the valid next states that we can get
         dimension= node.dim
         listOfActions = []
@@ -113,7 +117,8 @@ class puzzleProblem:
     # returns the numbers in the puzzle as a string
     def toString(self, node):
         return ''.join(str(n) for row in node.n_puzzle.tolist() for n in row)
-        
+
+    # Checks whether the current puzzle 
     def isGoal(self, node) -> bool:
         return np.array_equal(node.n_puzzle, self.goalState)
 
@@ -126,8 +131,8 @@ class puzzleProblem:
     def printGoalState(self):
         print(self.goalState)
 
-    #Operators to change 0 -> {some index} to achieve goal state (Vaneeeeesha)
-    def operator_go_left(self, currNode):
+    #Operators to change 0 -> left of the matrix
+    def operator_go_left(self, currNode) -> Node:
         new_node = copy.deepcopy(currNode)
 
         access_node = currNode
@@ -147,8 +152,8 @@ class puzzleProblem:
         return new_node
 
             
-    
-    def operator_go_right(self, currNode):
+    #Moves 0 -> right in the matrix
+    def operator_go_right(self, currNode) -> Node:
         new_node = copy.deepcopy(currNode)
         access_node = currNode
 
@@ -160,13 +165,10 @@ class puzzleProblem:
 
         new_node.cost += 1
 
-        # print(f'After right operation:\n{new_node.n_puzzle}')
-
-        # print("currNode:", currNode)
-        # print("deep copy:", new_node)
         return new_node
-
-    def operator_go_up(self, currNode):
+    
+    #Moves 0 -> upwards in the matrix
+    def operator_go_up(self, currNode) -> Node:
         new_node = copy.deepcopy(currNode)
         access_node = currNode
 
@@ -178,13 +180,10 @@ class puzzleProblem:
 
         new_node.cost += 1
 
-        # print(f'After up operation:\n{new_node.n_puzzle}')
-
-        # print("currNode:", currNode)
-        # print("deep copy:", new_node)
         return new_node
-
-    def operator_go_down(self, currNode):
+    
+    #Moves 0 -> downwards in the matrix
+    def operator_go_down(self, currNode) -> Node:
         new_node = copy.deepcopy(currNode)
         access_node = currNode
 
@@ -195,9 +194,5 @@ class puzzleProblem:
         new_node.parent = access_node
 
         new_node.cost += 1
-
-        # print("currNode:", currNode)
-        # print("deep copy:", new_node)
-        # print(f'After down operation:\n{new_node.n_puzzle}')
 
         return new_node

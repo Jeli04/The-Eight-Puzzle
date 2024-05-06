@@ -4,6 +4,7 @@ import sys
 from n_puzzle import Node
 from n_puzzle import puzzleProblem
 
+#Prevents program from infinite recursion (caused by unsolved puzzles)
 sys.setrecursionlimit(1000000000)
 
 class uniform_cost_search:
