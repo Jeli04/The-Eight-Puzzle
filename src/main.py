@@ -37,7 +37,24 @@ def main():
         matrix = np.array(matrix_input)
         
         initial = Node(dim=int(dim), n_puzzle=matrix)
-        # initial.printPuzzle()
+
+
+        while (not initial.Solvable()):
+            print("Puzzle not solvable, please re-enter your puzzle:\n")
+            print("Enter your puzzle, use a zero to represent the blank")
+            print("Enter your rows, use space or tabs between numbers 1 2 3")
+            
+            # Collect puzzle input as a list of list1s
+            matrix_input = []
+            for _ in range(dim):
+                row = list(map(int, input().split()))
+                matrix_input.append(row)
+            
+            # Convert the list of lists to a NumPy array
+            matrix = np.array(matrix_input)
+            
+            initial = Node(dim=int(dim), n_puzzle=matrix)
+        
     
     problem = puzzleProblem(initial)
     
@@ -53,6 +70,7 @@ def main():
     problem.expandNode(initial)
     
     if (algo == 1):
+        print(f"Starting State:\n {initial.n_puzzle}")
         object = uniform_cost_search()
         output = object.execute_ucs(problem)
     elif (algo == 2):
@@ -60,6 +78,7 @@ def main():
         print(f"Starting State:\n {initial.n_puzzle}")
         output = object.call_a_star(problem, "misplaced")
     elif (algo == 3):
+        print(f"Starting State:\n {initial.n_puzzle}")
         object = a_star()
         output = object.call_a_star(problem, "euclidean")
     

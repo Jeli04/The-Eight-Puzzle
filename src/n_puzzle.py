@@ -206,14 +206,3 @@ class puzzleProblem:
         # print(f'After down operation:\n{new_node.n_puzzle}')
 
         return new_node
-    
-
-new_node = Node(n_puzzle=np.asmatrix(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]])))
-
-puzzle = puzzleProblem(root=new_node)
-
-print(new_node.n_puzzle)
-
-puzzle.printGoalState()
-
-print(puzzle.isGoal(new_node))
