@@ -10,7 +10,7 @@ def calc_depth(puzzle, seen):
     curr_state = seen["123456780"] # goal
     while curr_state != puzzle.root:
         depth+=1
-        # print(curr_state.n_puzzle)
+        print(curr_state.n_puzzle)
         curr_state = curr_state.parent
 
     return depth

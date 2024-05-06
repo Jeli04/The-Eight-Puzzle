@@ -5,7 +5,7 @@ import copy
 class Node:
     #Constructor for puzzle node
     def __init__(self, dim = 3, n_puzzle = None, parent = None) -> None:
-        if dim == 3 and n_puzzle is None or dim > 3 and n_puzzle is None:
+        if dim == 3 and n_puzzle is None or dim > 3:
             self.dim = dim
             self.n_puzzle = np.arange(self.dim * self.dim)
             np.random.shuffle(self.n_puzzle)
@@ -89,7 +89,6 @@ class puzzleProblem:
         self.numOfExpandedNodes = 0
         self.maxQueueSize = 0
   
-    #Aditi & Jon: implement priority queue
     def expandNode(self,node):
         # this function will figure out a list of all the valid next states that we can get
         dimension= node.dim
@@ -135,6 +134,7 @@ class puzzleProblem:
     #Operators to change 0 -> {some index} to achieve goal state (Vaneeeeesha)
     def operator_go_left(self, currNode):
         new_node = copy.deepcopy(currNode)
+
         access_node = currNode
 
         currIndex_col = new_node.getInitialStateIndex()[0]
@@ -208,12 +208,12 @@ class puzzleProblem:
         return new_node
     
 
-new_node = Node(n_puzzle=np.asmatrix(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]])))
+# new_node = Node(n_puzzle=np.asmatrix(np.array([[1, 2, 3], [4, 5, 6], [7, 8, 0]])))
 
-puzzle = puzzleProblem(root=new_node)
+# puzzle = puzzleProblem(root=new_node)
 
-print(new_node.n_puzzle)
+# print(new_node.n_puzzle)
 
-puzzle.printGoalState()
+# puzzle.printGoalState()
 
-print(puzzle.isGoal(new_node))
+# print(puzzle.isGoal(new_node))
