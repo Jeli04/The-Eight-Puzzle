@@ -5,7 +5,7 @@ import copy
 class Node:
     #Constructor for puzzle node
     def __init__(self, dim = 3, n_puzzle = None, parent = None) -> None:
-        if dim == 3 and n_puzzle is None or dim > 3:
+        if dim == 3 and n_puzzle is None:
             self.dim = dim
             self.n_puzzle = np.arange(self.dim * self.dim)
             np.random.shuffle(self.n_puzzle)
@@ -19,7 +19,7 @@ class Node:
             #Sets array to matrix type
             self.n_puzzle = np.asmatrix(self.n_puzzle.reshape(self.dim, self.dim))
 
-        elif n_puzzle is not None and dim >= 3:
+        elif n_puzzle is not None:
             self.dim = dim
             self.n_puzzle = n_puzzle
         elif dim < 3:
@@ -145,10 +145,6 @@ class puzzleProblem:
 
         new_node.cost += 1
 
-        # print(f'After left operation:\n{new_node.n_puzzle}')
-
-        # print("currNode:", currNode)
-        # print("deep copy:", new_node)
         return new_node
 
             

@@ -34,9 +34,9 @@ def main():
             matrix_input.append(row)
         
         # Convert the list of lists to a NumPy array
-        matrix = np.array(matrix_input)
+        matrix = np.asmatrix(np.array(matrix_input))
         
-        initial = Node(dim=int(dim), n_puzzle=matrix)
+        initial = Node(dim=dim, n_puzzle=matrix)
 
 
         while (not initial.Solvable()):
