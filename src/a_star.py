@@ -57,37 +57,22 @@ class a_star:
                 # calculate the child node g value
                 child_cost = child.parent.cost + 1
                             
-                seen = False
-
                 # update child node if smaller cost     
                 puzzleString = puzzle.toString(child)
-                if seen == False and puzzleString in puzzle.seen and child_cost < curr_node_cost:
-                    if len(puzzle.frontier) > 2: return
-                    # print(puzzleString)
-                    seen = True
-                    seenNode = puzzle.seen[puzzleString]
-                    seenNode.cost = child_cost
-                    seenNode.parent = node
-                    heapq.heappush(puzzle.frontier, ((child_cost + self.heuristic_cost(heuristic_type, child)), seenNode))
-                    # print("Before delete ", len(puzzle.seen))
-                    del puzzle.seen[puzzleString]
-                    # print("After delete ", len(puzzle.seen))
-                    puzzle.maxQueueSize = max(puzzle.maxQueueSize, len(puzzle.frontier))
-                else:
-                    for pair in puzzle.frontier:
-                        # if len(puzzle.frontier) > 5: return
-                        if np.array_equal(pair[1].n_puzzle, child.n_puzzle):
-                            seen = True
-                            if child_cost < curr_node_cost:
-                                pair[1].cost = child_cost
-                                pair[1].parent = node
-                                break
+                if puzzleString in puzzle.seen: continue
 
-                # add into frontier if never seen yet
-                if seen == False:
+                for pair in puzzle.frontier:
+                    if np.array_equal(pair[1].n_puzzle, child.n_puzzle) and child_cost > curr_node_cost:
+                        continue
+
+                if puzzleString not in puzzle.seen or child.cost < puzzle.seen[puzzleString].cost:
                     child.cost = child_cost
-                    child.heuristic = self.heuristic_cost(heuristic_type, child)    
+                    child.heuristic = self.heuristic_cost(heuristic_type, child)
+                    child.total_cost = child.cost + child.heuristic
+                    child.parent = node
+
                     heapq.heappush(puzzle.frontier, (child.cost + child.heuristic, child))
+                    puzzle.seen[puzzleString] = child
                     puzzle.maxQueueSize = max(puzzle.maxQueueSize, len(puzzle.frontier))
 
             puzzle.seen[puzzle.toString(node)] = node
